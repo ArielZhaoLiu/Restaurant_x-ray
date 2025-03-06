@@ -25,5 +25,14 @@ public class EventController {
         return "/events/create";
     }
 
+    @PostMapping({ "/event/create"})
+    public String create(@Valid Event event, BindingResult bindingResult, Model model){
 
+        if(bindingResult.hasErrors()){
+            return "/events/create";
+        }
+
+        eventRepo.save(event);
+        return "redirect:/events";
+    }
 }

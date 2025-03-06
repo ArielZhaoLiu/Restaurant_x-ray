@@ -18,5 +18,12 @@ public class EventController {
         this.eventRepo = eventRepo;
     }
 
+    @GetMapping({ "/event/create"})
+    public String create(Model model){
+
+        model.addAttribute("event", new Event());
+        return "/events/create";
+    }
+
 
 }

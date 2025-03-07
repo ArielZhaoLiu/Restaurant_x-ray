@@ -1,10 +1,13 @@
 package nbcc.restaurant.controllers;
 
+import jakarta.validation.Valid;
 import nbcc.restaurant.entities.Layout;
 import nbcc.restaurant.repositories.LayoutRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class LayoutController {
@@ -27,5 +30,15 @@ public class LayoutController {
 
         model.addAttribute("game", new Layout());
         return "/layouts/create";
+    }
+
+    @PostMapping("/layout/create")
+    public String create(@Valid Layout layout, BindingResult bindingResult, Model model) {
+
+        if (bindingResult.hasErrors()) {
+            return "/layouts/create";
+        }
+        layoutRepo.save(layout);
+        return "redirect:/layouts";
     }
 }

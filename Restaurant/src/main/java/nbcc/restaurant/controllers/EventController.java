@@ -18,6 +18,14 @@ public class EventController {
         this.eventRepo = eventRepo;
     }
 
+    @GetMapping({"/", "events"})
+    public String getAll(Model model){
+        var values = eventRepo.findAll();
+
+        model.addAttribute( "events", values);
+        return "/events/index";
+    }
+
     @GetMapping({ "/event/create"})
     public String create(Model model){
 

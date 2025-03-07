@@ -1,5 +1,6 @@
 package nbcc.restaurant.controllers;
 
+import nbcc.restaurant.entities.Layout;
 import nbcc.restaurant.repositories.LayoutRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,5 +20,12 @@ public class LayoutController {
         var values = layoutRepo.findAll();
         model.addAttribute("layouts", values);
         return "/layouts/index";
+    }
+
+    @GetMapping("/layout/create")
+    public String create(Model model) {
+
+        model.addAttribute("game", new Layout());
+        return "/layouts/create";
     }
 }

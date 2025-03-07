@@ -28,7 +28,7 @@ public class LayoutController {
     @GetMapping("/layout/create")
     public String create(Model model) {
 
-        model.addAttribute("game", new Layout());
+        model.addAttribute("layout", new Layout());
         return "/layouts/create";
     }
 

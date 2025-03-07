@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>Events</title>
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+</head>
+<body>
+<!-- <header th:insert="~{nav :: navbar}">
+
+</header>-->
+<div class="container">
+    <main role="main" class="pb-3">
+        <a th:href="@{/event/create}">Add Event</a>
+        <table class="table" th:unless="${events ==null}">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Price</th>
+                <th>Manage</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="event :${events}">
+                <td><span th:text="${event.name}"></span></td>
+                <td><span th:text="${event.description}"></span></td>
+                <td><span th:text="${event.startDate}"></span></td>
+                <td><span th:text="${event.endDate}"></span></td>
+                <td><span th:text="${event.price}"></span></td>
+                <td><a th:href="@{/event/{id}(id=${event.id})}">Details</a>
+                    | <a th:href="@{/event/edit/{id}(id=${event.id})}">Edit</a>
+                    | <a th:href="@{/event/delete/{id}(id=${event.id})}">Delete</a></td>
+            </tr>
+            </tbody>
+        </table>
+    </main>
+</div>
+</body>
+</html>

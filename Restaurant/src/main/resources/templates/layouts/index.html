@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <title>Layouts</title>
+  <link th:href="@{/css/bootstrap.css}" rel="stylesheet"/>
+</head>
+<body>
+<header>
+<!--  <div th:insert="~{nav :: navbar}"></div>-->
+</header>
+<div class="container">
+  <main role="main" class="pb-3">
+<!--    <a th:href="@{/game/create}">Add Game</a>-->
+    <table class="table" th:unless="${layouts == null}">
+      <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Created Date</th>
+        <th>Manage</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="layout : ${layouts}">
+        <td><span th:text="${layout.name}"></span></td>
+        <td><span th:text="${layout.description}"></span></td>
+        <td><span th:text="${layout.createdDate}"></span></td>
+        <td>
+<!--          <a th:href="@{/game/{id}(id=${game.id})}">Details</a> |-->
+<!--          <a th:href="@{/game/edit/{id}(id=${game.id})}">Edit</a> |-->
+<!--          <a th:href="@{/game/delete/{id}(id=${game.id})}">Delete</a>-->
+        </td>
+
+      </tr>
+      </tbody>
+    </table>
+  </main>
+</div>
+</body>
+</html>

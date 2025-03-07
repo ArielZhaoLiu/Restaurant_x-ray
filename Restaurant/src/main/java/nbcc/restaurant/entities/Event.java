@@ -21,7 +21,7 @@ public class Event {
     @NotBlank
     private String name;
     private String description;
-
+//
     @NotNull
     @NotBlank
     @DateTimeFormat(pattern = "yyyy-MM-dd")

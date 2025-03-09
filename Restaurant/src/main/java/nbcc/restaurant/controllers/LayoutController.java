@@ -1,7 +1,9 @@
 package nbcc.restaurant.controllers;
 
 import jakarta.validation.Valid;
+import nbcc.restaurant.entities.DiningTable;
 import nbcc.restaurant.entities.Layout;
+import nbcc.restaurant.repositories.DiningTableRepository;
 import nbcc.restaurant.repositories.LayoutRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,9 +16,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class LayoutController {
 
     private final LayoutRepository layoutRepo;
+    private final DiningTableRepository diningTableRepo;
 
-    public LayoutController(LayoutRepository layoutRepo) {
+    public LayoutController(LayoutRepository layoutRepo, DiningTableRepository diningTableRepo) {
         this.layoutRepo = layoutRepo;
+        this.diningTableRepo = diningTableRepo;
     }
 
     @GetMapping("/layouts")
@@ -46,9 +50,13 @@ public class LayoutController {
     @GetMapping("/layout/edit/{id}")
     public String edit(Model model, @PathVariable long id) {
         var entity = layoutRepo.findById(id);
+        var tables = diningTableRepo.findByLayoutId(id);
 
         if(entity.isPresent()) { // this means the entity was found in the database
             model.addAttribute("layout", entity.get());
+            model.addAttribute("diningTables", tables); // can't just diningTableRepo.getAll(), this gonna all tables,no just associated with current layout id
+            model.addAttribute("newDiningTable", new DiningTable()); //add create new table
+
             return "/layouts/edit";
         }
         return "redirect:/layouts";
@@ -63,4 +71,5 @@ public class LayoutController {
         layoutRepo.save(layout);
         return "redirect:/layouts";
     }
+
 }

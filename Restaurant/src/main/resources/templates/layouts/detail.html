@@ -28,7 +28,10 @@
       </dl>
       <!-- to do -- Dinning Table detail -->
 
-      <div><a th:href="@{/layouts}">Go Back</a></div>
+      <div>
+        <a th:href="@{/layout/edit/{id}(id=${layout.id})}">Edit Layout</a> &nbsp&nbsp&nbsp
+        <a th:href="@{/layouts}">Go Back</a>
+      </div>
     </div>
   </main>
 </div>

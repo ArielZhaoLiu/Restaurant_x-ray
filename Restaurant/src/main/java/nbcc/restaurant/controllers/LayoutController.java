@@ -96,6 +96,24 @@ public class LayoutController {
         return "redirect:/layouts";
     }
 
+    @GetMapping("/layout/delete/{id}")
+    public String delete (Model model, @PathVariable long id){
 
+        var entity = layoutRepo.findById(id);
+
+        if(entity.isPresent()) { // this means the entity was found in the database
+            model.addAttribute("layout", entity.get());
+            return "/layouts/delete";
+        }
+
+        return "redirect:/layouts";
+    }
+
+    @PostMapping("/layout/delete/{id}")
+    public String delete(@PathVariable long id) {
+
+        layoutRepo.deleteById(id);
+        return "redirect:/layouts";
+    }
 
 }

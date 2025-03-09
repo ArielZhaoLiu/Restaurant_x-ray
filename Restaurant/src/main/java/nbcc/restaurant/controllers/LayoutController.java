@@ -11,6 +11,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class LayoutController {
@@ -73,14 +74,16 @@ public class LayoutController {
     }
 
     @PostMapping("/diningTable/create")
-    public String tableCreate(@Valid DiningTable diningTable, BindingResult bindingResult, Model model) {
+    public String tableCreate(@RequestParam long layoutId, @Valid DiningTable diningTable, BindingResult bindingResult, Model model) {
 
         if (bindingResult.hasErrors()) {
             return "/layouts/edit";
         }
+
+        Layout layout = layoutRepo.findById(layoutId).orElse(null);
+        diningTable.setLayout(layout);     // if no this, layout will be null
         diningTableRepo.save(diningTable);
 
-        var layoutId = diningTable.getLayout().getId();
         return "redirect:/layout/edit/" + layoutId;
     }
 

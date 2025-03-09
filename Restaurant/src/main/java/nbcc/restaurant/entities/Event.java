@@ -1,14 +1,12 @@
 package nbcc.restaurant.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 public class Event {
@@ -32,6 +30,9 @@ public class Event {
 
     @NotNull
     private Double price;
+
+    @OneToMany(mappedBy = "seating", fetch = FetchType.LAZY)
+    private List<Seating> seatings;
 
     public Event() {
     }
@@ -90,5 +91,13 @@ public class Event {
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    public List<Seating> getSeatings() {
+        return seatings;
+    }
+
+    public void setSeatings(List<Seating> seatings) {
+        this.seatings = seatings;
     }
 }

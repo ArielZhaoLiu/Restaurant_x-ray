@@ -1,9 +1,6 @@
 package nbcc.restaurant.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class DiningTable {
@@ -13,6 +10,10 @@ public class DiningTable {
     private long id;
 
     private int numberOfSeats;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "layout_id", foreignKey = @ForeignKey(name = "FK_DININGTABLE_LAYOUT"))
+    private Layout layout;
 
     public DiningTable() {
     }
@@ -31,5 +32,13 @@ public class DiningTable {
 
     public void setNumberOfSeats(int numberOfSeats) {
         this.numberOfSeats = numberOfSeats;
+    }
+
+    public Layout getLayout() {
+        return layout;
+    }
+
+    public void setLayout(Layout layout) {
+        this.layout = layout;
     }
 }

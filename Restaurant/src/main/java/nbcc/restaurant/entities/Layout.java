@@ -24,6 +24,9 @@ public class Layout {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate createdDate;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate lastUpdatedDate;
+
     @OneToMany(mappedBy = "layout", fetch = FetchType.LAZY)
     private List<DiningTable> diningTables;
 
@@ -68,6 +71,14 @@ public class Layout {
         this.createdDate = createdDate;
     }
 
+    public LocalDate getLastUpdatedDate() {
+        return lastUpdatedDate;
+    }
+
+    public void setLastUpdatedDate(LocalDate lastUpdatedDate) {
+        this.lastUpdatedDate = lastUpdatedDate;
+    }
+
     public List<DiningTable> getDiningTables() {
         return diningTables;
     }
@@ -75,4 +86,5 @@ public class Layout {
     public void setDiningTables(List<DiningTable> diningTables) {
         this.diningTables = diningTables;
     }
+
 }

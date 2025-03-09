@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 public class Seating {
@@ -16,7 +17,7 @@ public class Seating {
 
     @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd-mm")
-    private LocalDate seatingDateTime;
+    private LocalDateTime seatingDateTime;
 
     @NotNull
     private int seatingDuration;
@@ -28,7 +29,7 @@ public class Seating {
     public Seating() {
     }
 
-    public Seating(LocalDate seatingDateTime, int seatingDuration, Event event) {
+    public Seating(LocalDateTime seatingDateTime, int seatingDuration, Event event) {
         this.seatingDateTime = seatingDateTime;
         this.seatingDuration = seatingDuration;
         this.event = event;
@@ -42,11 +43,11 @@ public class Seating {
         this.id = id;
     }
 
-    public LocalDate getSeatingDateTime() {
+    public LocalDateTime getSeatingDateTime() {
         return seatingDateTime;
     }
 
-    public void setSeatingDateTime(LocalDate seatingDateTime) {
+    public void setSeatingDateTime(LocalDateTime seatingDateTime) {
         this.seatingDateTime = seatingDateTime;
     }
 

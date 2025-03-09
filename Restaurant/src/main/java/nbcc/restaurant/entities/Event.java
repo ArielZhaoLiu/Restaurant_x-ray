@@ -31,7 +31,7 @@ public class Event {
     @NotNull
     private Double price;
 
-    @OneToMany(mappedBy = "seating", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "event", fetch = FetchType.LAZY)
     private List<Seating> seatings;
 
     public Event() {

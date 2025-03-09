@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <title>Create Seating</title>
+  <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+</head>
+<body>
+<header><div th:insert="~{nav :: navbar}"></div></header>
+<div class="container">
+  <main role="main" class="pb-3">
+
+    <div class="row">
+      <div class="col-md-4">
+        <form th:action="@{/seating/create}" method="post" th:object="${seating}">
+          <input type="hidden" th:field="*{event.id}">
+          <div class="form-group">
+            <label class="control-label"> Seating Date:
+              <input type="date" th:field="*{seatingDateTime}" class="form-control"/>
+            </label>
+            <div class="alert alert-warning" th:errors="*{seatingDateTime}"></div>
+          </div>
+
+          <div class="form-group">
+            <label class="control-label"> Duration:
+              <input th:field="*{seatingDuration}" class="form-control"/>
+            </label>
+            <div class="alert alert-warning" th:errors="*{seatingDuration}"></div>
+          </div>
+
+
+          <div class="form-group"><input type="submit" value="Save" class="btn btn-primary"/></div>
+        </form>
+      </div>
+    </div>
+    <div><a th:href="@{/events}">Go Back</a></div>
+  </main>
+</div>
+</body>
+</html>

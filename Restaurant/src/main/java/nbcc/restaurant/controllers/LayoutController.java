@@ -53,4 +53,14 @@ public class LayoutController {
         }
         return "redirect:/layouts";
     }
+
+    @PostMapping("/layout/edit")
+    public String edit(@Valid Layout layout, BindingResult bindingResult, Model model) {
+
+        if (bindingResult.hasErrors()) {
+            return "/layouts/edit";
+        }
+        layoutRepo.save(layout);
+        return "redirect:/layouts";
+    }
 }

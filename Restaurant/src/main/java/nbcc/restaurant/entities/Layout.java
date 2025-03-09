@@ -21,8 +21,7 @@ public class Layout {
 
     private String description;
 
-    @NotNull
-    @DateTimeFormat
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate createdDate;
 
     @OneToMany(mappedBy = "layout", fetch = FetchType.LAZY)

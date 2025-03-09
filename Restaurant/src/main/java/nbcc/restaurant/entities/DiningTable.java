@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 public class DiningTable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     private int numberOfSeats;

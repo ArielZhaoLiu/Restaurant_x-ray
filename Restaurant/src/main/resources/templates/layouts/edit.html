@@ -61,11 +61,10 @@
                     </tbody>
                 </table>
 
-
-
                 <!-- Add New Dining Table Form -->
                 <h3>Add New Dining Table</h3>
                 <form th:action="@{/diningTable/create}" method="post" th:object="${newDiningTable}">
+                    <input type="hidden" name="layoutId" th:value="${layout.id}" />
                     <div class="form-group">
                         <label class="control-label">Table ID:
                             <input th:field="*{id}" class="form-control"/>

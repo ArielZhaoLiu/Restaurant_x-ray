@@ -72,4 +72,30 @@ public class LayoutController {
         return "redirect:/layouts";
     }
 
+    @PostMapping("/diningTable/create")
+    public String tableCreate(@Valid DiningTable diningTable, BindingResult bindingResult, Model model) {
+
+        if (bindingResult.hasErrors()) {
+            return "/layouts/edit";
+        }
+        diningTableRepo.save(diningTable);
+
+        var layoutId = diningTable.getLayout().getId();
+        return "redirect:/layout/edit/" + layoutId;
+    }
+
+    @GetMapping("/layout/{id}")
+    public String detail(Model model, @PathVariable long id){
+
+        var entity = layoutRepo.findById(id);
+
+        if(entity.isPresent()) { // this means the entity was found in the database
+            model.addAttribute("layout", entity.get());
+            return "/layouts/detail";
+        }
+        return "redirect:/layouts";
+    }
+
+
+
 }

@@ -87,6 +87,14 @@ public class LayoutController {
         return "redirect:/layout/edit/" + layoutId;
     }
 
+
+    @PostMapping("/diningTable/delete/{id}")
+    public String tableDelete(@PathVariable long id, @RequestParam long layoutId) {
+
+        diningTableRepo.deleteById(id);
+        return "redirect:/layout/edit/" + layoutId;
+    }
+
     @GetMapping("/layout/{id}")
     public String detail(Model model, @PathVariable long id){
 
@@ -118,5 +126,7 @@ public class LayoutController {
         layoutRepo.deleteById(id);
         return "redirect:/layouts";
     }
+
+
 
 }

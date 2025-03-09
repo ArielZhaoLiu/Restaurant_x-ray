@@ -36,9 +36,15 @@ public class EventController {
     @PostMapping({ "/event/create"})
     public String create(@Valid Event event, BindingResult bindingResult, Model model){
 
+        if(event.getStartDate().isAfter(event.getEndDate())){
+            bindingResult.rejectValue("startDate", "error.startDate", "Start date cannot be after end date");
+            //return "/events/create";
+        }
+
         if(bindingResult.hasErrors()){
             return "/events/create";
         }
+
 
         eventRepo.save(event);
         return "redirect:/events";

@@ -23,12 +23,10 @@ public class Event {
     private String description;
 
     @NotNull
-    @NotBlank
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate startDate;
 
     @NotNull
-    @NotBlank
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate endDate;
 

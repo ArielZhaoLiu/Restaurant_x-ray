@@ -3,6 +3,7 @@ package nbcc.restaurant.entities;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
@@ -21,6 +22,9 @@ public class Seating {
 
     @NotNull
     private int seatingDuration;
+
+    @CreationTimestamp
+    private LocalDateTime createdDateTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="event_id", foreignKey = @ForeignKey(name="FK_EVENT_SEATING"))

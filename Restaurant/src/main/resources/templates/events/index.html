@@ -22,6 +22,7 @@
             </thead>
             <tbody>
             <tr th:each="event :${events}">
+                <span th:if="${event.isArchived() == false}">
                 <td><span th:text="${event.name}"></span></td>
                 <td><span th:text="${event.description}"></span></td>
                 <td><span th:text="${event.startDate}"></span></td>
@@ -30,6 +31,7 @@
                 <td><a th:href="@{/event/{id}(id=${event.id})}">Details</a>
                     | <a th:href="@{/event/edit/{id}(id=${event.id})}">Edit</a>
                     | <a th:href="@{/event/delete/{id}(id=${event.id})}">Delete</a></td>
+                </span>
             </tr>
             </tbody>
         </table>

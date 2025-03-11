@@ -39,6 +39,8 @@ public class Event {
     @OneToMany(mappedBy = "event", fetch = FetchType.LAZY)
     private List<Seating> seatings;
 
+    private boolean isArchived = false;
+
     public Event() {
     }
 
@@ -96,6 +98,22 @@ public class Event {
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    public LocalDate getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(LocalDate createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public boolean isArchived() {
+        return isArchived;
+    }
+
+    public void setArchived(boolean archived) {
+        isArchived = archived;
     }
 
     public List<Seating> getSeatings() {

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.time.LocalDate;
 import java.util.Objects;
 
 @Controller
@@ -88,6 +89,41 @@ public class EventController {
             entity.get().setSeatings(seatings);
             model.addAttribute("event", entity.get());
             return "/events/detail";
+        }
+
+        return "redirect:/events";
+    }
+
+    @GetMapping({ "/event/delete/{id}"})
+    public String delete(Model model, @PathVariable long id){
+        var entity= eventRepo.findById(id);
+
+        if(entity.isPresent()){
+            model.addAttribute("event", entity.get());
+            return "/events/delete";
+        }
+        return "redirect:/events";
+    }
+
+    @PostMapping({ "/event/delete/{id}"})
+    public String delete( @PathVariable long id){
+        var entity= eventRepo.findById(id);
+
+
+        if(entity.isPresent()){
+           var event= entity.get();
+
+            if(event.getStartDate().isBefore(LocalDate.now()) && event.getEndDate().isBefore(LocalDate.now())){
+                event.setArchived(true);
+                eventRepo.save(event);
+                return "redirect:/events";
+            }
+
+            if(!event.getSeatings().isEmpty()){
+                var seatings = seatingRepo.findByEventId(id);
+                seatingRepo.deleteAll(seatings);
+            }
+            eventRepo.deleteById(id);
         }
 
         return "redirect:/events";

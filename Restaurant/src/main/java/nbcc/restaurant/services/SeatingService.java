@@ -18,4 +18,7 @@ public class SeatingService {
         return seatingRepository.findAll();
     }
 
+    public List<Seating> findByEventId(Long event_id) {
+        return seatingRepository.findByEventId(event_id);
+    }
 }

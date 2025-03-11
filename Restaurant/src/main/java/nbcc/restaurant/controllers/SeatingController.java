@@ -15,29 +15,55 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class SeatingController {
 
-    private final SeatingRepository seatingRepository;
-    private final EventRepository eventRepository;
+    private final SeatingRepository seatingRepo;
+    private final EventRepository eventRepo;
 
-    public SeatingController(SeatingRepository seatingRepository, EventRepository eventRepository) {
-        this.seatingRepository = seatingRepository;
-        this.eventRepository = eventRepository;
+    public SeatingController(SeatingRepository seatingRepo, EventRepository eventRepo) {
+        this.seatingRepo = seatingRepo;
+        this.eventRepo = eventRepo;
     }
 
-    @GetMapping({ "/seating/create"})
-    public String create(Model model){
+    @GetMapping({ "/seating/create/{id}"})
+    public String create(Model model, @PathVariable long id){
+        var entity= eventRepo.findById(id);
 
-        model.addAttribute("seating", new Seating());
-        return "/seatings/create";
-    }
-
-    @PostMapping({ "/seating/create"})
-    public String create(@Valid Seating seating, BindingResult bindingResult, Model model){
-        if(bindingResult.hasErrors()){
+        if(entity.isPresent()){
+            model.addAttribute("event", entity.get());
+            model.addAttribute("seating", new Seating());
             return "/seatings/create";
         }
 
-        seatingRepository.save(seating);
-        return "redirect:/seatings";
+        return "redirect:/events/"+id;
     }
+
+    @PostMapping({ "/seating/create/{event_id}"})
+    public String create(@Valid Seating seating, BindingResult bindingResult, @PathVariable long event_id, Model model){
+        var eventDb= eventRepo.findById(event_id);
+        if(eventDb.isPresent()) {
+            var event = eventDb.get();
+            if (bindingResult.hasErrors()) {
+               return "/seatings/create";
+           }
+
+
+           if (seating.getSeatingDateTime().toLocalDate().isBefore(event.getStartDate())) {
+               bindingResult.rejectValue("seatingDateTime", "error.seatingDateTime", "Seating date cannot be before event start date");
+               return "/seatings/create";
+           }
+           if (seating.getSeatingDateTime().plusMinutes(seating.getSeatingDuration()).toLocalDate().isAfter(event.getEndDate())) {
+               bindingResult.rejectValue("seatingDuration", "error.seatingDuration", "Seating duration cannot exceed event end date");
+               return "/seatings/create";
+           }
+
+           seating.setEvent(event);
+           try{seatingRepo.save(seating);} catch (Exception e) {
+            System.out.println(e.getMessage());
+            }
+
+       }
+        return "redirect:/event/" + event_id;
+
+    }
+
 
 }

@@ -1,33 +1,27 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
-  <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
-  <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
   <title>Create Seating</title>
+  <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
 </head>
 <body>
-
-<div th:fragment="createSeating" class="container">
+<header><div th:insert="~{nav :: navbar}"></div></header>
+<div class="container">
   <main role="main" class="pb-3">
+    <h4>Create Seating for <span th:text="${event.name}"></span></h4>
     <div class="row">
       <div class="col-md-4">
-        <form th:action="@{/seating/create}" method="post" th:object="${seating}">
-
-          <div class="form-group">
-            <label class="control-label"> Seating Date:
-              <input type="date" th:field="*{seatingDateTime}" class="form-control"/>
+        <form th:action="@{/seating/create/{event_id}(event_id=${event.id})}" method="post" th:object="${seating}">
+            <div class="form-group">
+            <label class="control-label">Seating Date and Time:
+              <input type="datetime-local" th:field="*{seatingDateTime}" class="form-control"/>
             </label>
             <div class="alert alert-warning" th:errors="*{seatingDateTime}"></div>
-          </div>
-
-          <div class="form-group">
-            <label class="control-label"> Duration:
-              <input th:field="*{seatingDuration}" class="form-control"/>
+            <label class="control-label">Seating Duration in minutes:
+              <input type="text" th:field="*{seatingDuration}" class="form-control"/>
             </label>
             <div class="alert alert-warning" th:errors="*{seatingDuration}"></div>
           </div>
-
-
           <div class="form-group"><input type="submit" value="Save" class="btn btn-primary"/></div>
         </form>
       </div>

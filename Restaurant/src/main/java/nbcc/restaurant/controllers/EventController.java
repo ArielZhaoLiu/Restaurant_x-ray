@@ -84,9 +84,12 @@ public class EventController {
         var entity= eventRepo.findById(id);
 
         if(entity.isPresent()){
+            var seatings = seatingRepo.findByEventId(id);
+            entity.get().setSeatings(seatings);
             model.addAttribute("event", entity.get());
             return "/events/detail";
         }
+
         return "redirect:/events";
     }
 

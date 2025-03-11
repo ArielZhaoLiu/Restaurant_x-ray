@@ -42,6 +42,11 @@
             </label>
             <div class="alert alert-warning" th:errors="*{endDate}"></div>
           </div>
+          <div class="form-group">
+            <label class="control-label">Seating Options:</label>
+            <input type="datetime-local" th:field="*{seatings[0].seatingDateTime}" class="form-control"/>
+            <input type="text" th:field="*{seatings[0].seatingDuration}" class="form-control"/>
+          </div>
           <div class="form-group"><input type="submit" value="Save" class="btn btn-primary"/></div>
         </form>
       </div>

@@ -2,7 +2,9 @@ package nbcc.restaurant.controllers;
 
 import jakarta.validation.Valid;
 import nbcc.restaurant.entities.Event;
+import nbcc.restaurant.entities.Seating;
 import nbcc.restaurant.repositories.EventRepository;
+import nbcc.restaurant.repositories.SeatingRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,9 +18,11 @@ import java.util.Objects;
 public class EventController {
 
     private final EventRepository eventRepo;
+    private final SeatingRepository seatingRepo;
 
-    public EventController(EventRepository eventRepo) {
+    public EventController(EventRepository eventRepo, SeatingRepository seatingRepository) {
         this.eventRepo = eventRepo;
+        this.seatingRepo = seatingRepository;
     }
 
     @GetMapping({"/", "events"})
@@ -39,7 +43,6 @@ public class EventController {
     @PostMapping({ "/event/create"})
     public String create(@Valid Event event, BindingResult bindingResult, Model model){
 
-
         if(bindingResult.hasErrors()){
             return "/events/create";
         }
@@ -52,7 +55,18 @@ public class EventController {
             return "/events/create";
         }
 
+        if (event.getSeatings() == null || event.getSeatings().isEmpty()) {
+            bindingResult.rejectValue("seatings", "error.seatings", "At least one seating is required.");
+            return "/events/create";
+        }
+
+        var seating = new Seating();
+        seating.setSeatingDateTime(event.getSeatings().get(0).getSeatingDateTime());
+        seating.setSeatingDuration(event.getSeatings().get(0).getSeatingDuration());
+        seating.setEvent(event);
+
         eventRepo.save(event);
+        seatingRepo.save(seating);
         return "redirect:/events";
     }
 

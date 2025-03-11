@@ -17,7 +17,7 @@ public class Seating {
     private long id;
 
     @NotNull
-    @DateTimeFormat(pattern = "yyyy-MM-dd-mm")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime seatingDateTime;
 
     @NotNull

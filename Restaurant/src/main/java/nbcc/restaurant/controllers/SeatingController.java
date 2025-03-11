@@ -23,15 +23,10 @@ public class SeatingController {
         this.eventRepository = eventRepository;
     }
 
-    @GetMapping({ "/seating/create/{id}"})
-    public String create(Model model, @PathVariable long id){
-        var event= eventRepository.findById(id);
+    @GetMapping({ "/seating/create"})
+    public String create(Model model){
 
-        if(event.isPresent()){
-            model.addAttribute("event", event.get());
-        }
-
-        model.addAttribute("seating", new Event());
+        model.addAttribute("seating", new Seating());
         return "/seatings/create";
     }
 

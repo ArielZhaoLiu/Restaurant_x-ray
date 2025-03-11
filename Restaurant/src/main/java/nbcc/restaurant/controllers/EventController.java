@@ -60,6 +60,15 @@ public class EventController {
             return "/events/create";
         }
 
+        if (event.getSeatings().get(0).getSeatingDateTime().toLocalDate().isBefore(event.getStartDate())){
+            bindingResult.rejectValue("seatings[0].seatingDateTime", "error.seatings[0].seatingDateTime", "Seating date cannot be before event start date");
+            return "/events/create";
+        }
+        if(event.getSeatings().get(0).getSeatingDateTime().plusMinutes(event.getSeatings().get(0).getSeatingDuration()).toLocalDate().isAfter(event.getEndDate())){
+            bindingResult.rejectValue("seatings[0].seatingDuration", "error.seatings[0].seatingDuration", "Seating duration cannot exceed event end date");
+            return "/events/create";
+        }
+
         var seating = new Seating();
         seating.setSeatingDateTime(event.getSeatings().get(0).getSeatingDateTime());
         seating.setSeatingDuration(event.getSeatings().get(0).getSeatingDuration());

@@ -52,10 +52,10 @@
       <table class="table" th:unless="${event.getSeatings() ==null}">
         <thead>
         <tr>
-          <th th:if="${event.startDate == event.endDate}">Start Date and Time</th>
-          <th th:if="${event.startDate != event.endDate}">Start Time</th>
-          <th th:if="${event.startDate == event.endDate}">End Date and Time</th>
-          <th th:if="${event.startDate != event.endDate}">End Time</th>
+          <th th:if="${event.startDate != event.endDate}">Start Date and Time</th>
+          <th th:if="${event.startDate == event.endDate}">Start Time</th>
+          <th th:if="${event.startDate != event.endDate}">End Date and Time</th>
+          <th th:if="${event.startDate == event.endDate}">End Time</th>
           <th>Duration in Minutes</th>
           <th>Manage</th>
         </tr>

@@ -38,7 +38,7 @@ public class Event {
     private LocalDate createdDate;
 
     @UpdateTimestamp
-    private LocalDateTime updatedAt;
+    private LocalDate updatedAt;
 
     @OneToMany(mappedBy = "event", fetch = FetchType.LAZY)
     private List<Seating> seatings;

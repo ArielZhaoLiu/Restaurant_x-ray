@@ -11,6 +11,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
 import java.util.Objects;
@@ -29,10 +30,10 @@ public class EventController {
     @GetMapping({"/", "events"})
     public String getAll(Model model){
         var values = eventRepo.findAll();
-
         model.addAttribute( "events", values);
         return "/events/index";
     }
+
 
     @GetMapping({ "/event/create"})
     public String create(Model model){
@@ -165,6 +166,32 @@ public class EventController {
 
     }
 
+
+    @PostMapping("/event/filter")
+    public String filter(String startDate, String endDate, Model model) {
+        LocalDate s;
+        LocalDate e;
+        var events = eventRepo.findAll();
+
+        if(startDate.isEmpty()) {
+            e = LocalDate.parse(endDate);
+            events = eventRepo.findByEndDateLessThanEqual(e);
+        }
+        else if(endDate.isEmpty()) {
+            s = LocalDate.parse(startDate);
+            events = eventRepo.findByStartDateGreaterThanEqual(s);
+        }
+        else {
+            s = LocalDate.parse(startDate);
+            e = LocalDate.parse(endDate);
+            events = eventRepo.findByStartDateGreaterThanEqualAndEndDateLessThanEqual(s, e);
+        }
+
+        model.addAttribute("events", events);
+        model.addAttribute("startDate", startDate);
+        model.addAttribute("endDate", endDate);
+        return "/events/index";
+    }
 }
 
 

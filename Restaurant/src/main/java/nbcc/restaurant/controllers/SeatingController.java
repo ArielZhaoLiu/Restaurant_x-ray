@@ -39,8 +39,9 @@ public class SeatingController {
     @PostMapping({ "/seating/create/{event_id}"})
     public String create(@Valid Seating seating, BindingResult bindingResult, @PathVariable long event_id, Model model){
         var eventDb= eventRepo.findById(event_id);
-        model.addAttribute("event", eventDb.get());
+
         if(eventDb.isPresent()) {
+            model.addAttribute("event", eventDb.get());
             var event = eventDb.get();
             if (bindingResult.hasErrors()) {
 
@@ -75,13 +76,17 @@ public class SeatingController {
     @GetMapping({ "/seating/delete/{id}"})
     public String delete(Model model, @PathVariable long id){
         var seating= seatingRepo.findById(id);
-        var eventDb= eventRepo.findById(seating.get().getEvent().getId());
 
-        model.addAttribute("event", eventDb.get());
 
         if(seating.isPresent()){
+            var eventDb= eventRepo.findById(seating.get().getEvent().getId());
+            if(eventDb.isPresent()) {
+            model.addAttribute("event", eventDb.get());
+
             model.addAttribute("seating", seating.get());
+            }
             return "/seatings/delete";
+
         }
         return "redirect:/event/" + seating.get().getEvent().getId();
     }

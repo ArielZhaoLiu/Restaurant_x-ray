@@ -50,14 +50,16 @@ public class EventController {
 
         if(event.getStartDate().isAfter(event.getEndDate())){
             bindingResult.rejectValue("startDate", "error.startDate", "Start date cannot be after end date");
-        }
-
-        if(bindingResult.hasErrors()){
             return "/events/create";
         }
 
-        if (event.getSeatings() == null || event.getSeatings().isEmpty()) {
-            bindingResult.rejectValue("seatings", "error.seatings", "At least one seating is required.");
+        if (event.getSeatings().get(0).getSeatingDateTime() == null ) {
+            bindingResult.rejectValue("seatings[0].seatingDateTime", "error.seatings[0].seatingDateTime","At least one seating is required.");
+            return "/events/create";
+        }
+
+        if (event.getSeatings().get(0).getSeatingDuration() <1 ) {
+            bindingResult.rejectValue("seatings[0].seatingDuration", "error.seatings[0].seatingDuration","Duration cannot be less than 1");
             return "/events/create";
         }
 
@@ -129,4 +131,34 @@ public class EventController {
         return "redirect:/events";
     }
 
+    @GetMapping({ "/event/edit/{id}"})
+    public String edit(Model model, @PathVariable long id){
+        var entity= eventRepo.findById(id);
+
+        if(entity.isPresent()){
+            model.addAttribute("event", entity.get());
+            return "/events/edit";
+        }
+        return "redirect:/events";
+    }
+
+    @PostMapping({ "/event/edit"})
+    public String edit(@Valid Event event, BindingResult bindingResult, Model model){
+        if(bindingResult.hasErrors()){
+            return "/events/edit";
+        }
+
+        if(event.getStartDate().isAfter(event.getEndDate())){
+            bindingResult.rejectValue("startDate", "error.startDate", "Start date cannot be after end date");
+            return "/events/edit";
+        }
+
+
+        eventRepo.save(event);
+        return "redirect:/events";
+
+    }
+
 }
+
+

@@ -39,21 +39,28 @@ public class SeatingController {
     @PostMapping({ "/seating/create/{event_id}"})
     public String create(@Valid Seating seating, BindingResult bindingResult, @PathVariable long event_id, Model model){
         var eventDb= eventRepo.findById(event_id);
+        model.addAttribute("event", eventDb.get());
         if(eventDb.isPresent()) {
             var event = eventDb.get();
             if (bindingResult.hasErrors()) {
-               return "/seatings/create";
+
+                return "seatings/create";
            }
 
 
            if (seating.getSeatingDateTime().toLocalDate().isBefore(event.getStartDate())) {
                bindingResult.rejectValue("seatingDateTime", "error.seatingDateTime", "Seating date cannot be before event start date");
-               return "/seatings/create";
+
+               return "seatings/create";
            }
            if (seating.getSeatingDateTime().plusMinutes(seating.getSeatingDuration()).toLocalDate().isAfter(event.getEndDate())) {
-               bindingResult.rejectValue("seatingDuration", "error.seatingDuration", "Seating duration cannot exceed event end date");
-               return "/seatings/create";
+               bindingResult.rejectValue("seatingDateTime", "error.seatingDateTime", "Seating duration cannot exceed event end date");
+               return "seatings/create";
            }
+            if (seating.getSeatingDuration()<1) {
+                bindingResult.rejectValue("seatingDuration", "error.seatingDuration", "Duration cannot be less than 1");
+                return "seatings/create";
+            }
 
            seating.setEvent(event);
            try{seatingRepo.save(seating);} catch (Exception e) {
@@ -63,6 +70,28 @@ public class SeatingController {
        }
         return "redirect:/event/" + event_id;
 
+    }
+
+    @GetMapping({ "/seating/delete/{id}"})
+    public String delete(Model model, @PathVariable long id){
+        var seating= seatingRepo.findById(id);
+        var eventDb= eventRepo.findById(seating.get().getEvent().getId());
+
+        model.addAttribute("event", eventDb.get());
+
+        if(seating.isPresent()){
+            model.addAttribute("seating", seating.get());
+            return "/seatings/delete";
+        }
+        return "redirect:/event/" + seating.get().getEvent().getId();
+    }
+
+    @PostMapping({ "/seating/delete/{id}"})
+    public String delete( @PathVariable long id){
+        var seating= seatingRepo.findById(id);
+        seatingRepo.deleteById(id);
+
+        return "redirect:/event/" + seating.get().getEvent().getId();
     }
 
 

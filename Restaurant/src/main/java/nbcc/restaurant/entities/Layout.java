@@ -1,14 +1,12 @@
 package nbcc.restaurant.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 public class Layout {
@@ -23,9 +21,14 @@ public class Layout {
 
     private String description;
 
-    @NotNull
-    @DateTimeFormat
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate createdDate;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate lastUpdatedDate;
+
+    @OneToMany(mappedBy = "layout", fetch = FetchType.LAZY)
+    private List<DiningTable> diningTables;
 
     public Layout() {
     }
@@ -67,4 +70,21 @@ public class Layout {
     public void setCreatedDate(LocalDate createdDate) {
         this.createdDate = createdDate;
     }
+
+    public LocalDate getLastUpdatedDate() {
+        return lastUpdatedDate;
+    }
+
+    public void setLastUpdatedDate(LocalDate lastUpdatedDate) {
+        this.lastUpdatedDate = lastUpdatedDate;
+    }
+
+    public List<DiningTable> getDiningTables() {
+        return diningTables;
+    }
+
+    public void setDiningTables(List<DiningTable> diningTables) {
+        this.diningTables = diningTables;
+    }
+
 }

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <title>Edit Layout</title>
+  <link th:href="@{/css/bootstrap.css}" rel="stylesheet"/>
+</head>
+<body>
+<header>
+<!--  <div th:insert="~{nav :: navbar}"></div>-->
+</header>
+<div class="container">
+    <main role="main" class="pb-3">
+        <div class="row">
+            <!-- Layout Edit Form -->
+            <div class="col-md-4">
+                <h2>Edit Layout</h2>
+                <form th:action="@{/layout/edit}" method="post" th:object="${layout}">
+                    <input type="hidden" th:field="*{id}"/>
+                    <div class="form-group">
+                        <label class="control-label">Name:
+                            <input th:field="*{name}" class="form-control"/>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Description:
+                            <input th:field="*{description}" class="form-control"/>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Created Date:
+                            <input type="date" th:field="*{createdDate}" class="form-control" readonly/>
+                        </label>
+                        <div class="alert alert-warning" th:errors="*{createdDate}"></div>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Save" class="btn btn-primary"/>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Dining Tables & Add New Table Form -->
+            <div class="col-md-6">
+                <h2>Dining Tables Under this Layout</h2>
+                <!-- Dining Tables List -->
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Table ID</th>
+                        <th>Number of Seats</th>
+                        <th>Manage</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="table : ${diningTables}">
+                        <td><span th:text="${table.id}"></span></td>
+                        <td><span th:text="${table.numberOfSeats}"></span></td>
+                        <td>
+                            <form th:action="@{/diningTable/delete/{id}(id=${table.id})}" method="post">
+                                <input type="hidden" name="layoutId" th:value="${layout.id}"/>
+                                <button  type="submit" class="btn btn-danger">Remove</button>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <!-- Add New Dining Table Form -->
+                <h3>Add New Dining Table</h3>
+                <form th:action="@{/diningTable/create}" method="post" th:object="${newDiningTable}">
+                    <input type="hidden" name="layoutId" th:value="${layout.id}" />
+                    <div class="form-group">
+                        <label class="control-label">Table ID:
+                            <input th:field="*{id}" class="form-control"/>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Number of Seats:
+                            <input th:field="*{numberOfSeats}" class="form-control"/>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Add Table" class="btn btn-primary"/>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div><a th:href="@{/layouts}">Go Back</a></div>
+    </main>
+</div>
+</body>
+</html>

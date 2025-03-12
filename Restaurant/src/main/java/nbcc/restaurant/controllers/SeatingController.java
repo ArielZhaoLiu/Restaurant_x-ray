@@ -95,4 +95,57 @@ public class SeatingController {
     }
 
 
+    @GetMapping({ "/seating/edit/{id}"})
+    public String edit(Model model, @PathVariable long id){
+        var seating= seatingRepo.findById(id);
+        var eventDb= eventRepo.findById(seating.get().getEvent().getId());
+
+        if(seating.isPresent()){
+            model.addAttribute("event", eventDb.get());
+            model.addAttribute("seating", seating.get());
+            return "/seatings/edit";
+        }
+        return "redirect:/event/" + seating.get().getEvent().getId();
+    }
+
+    @PostMapping({ "/seating/edit/{id}"})
+    public String edit(@PathVariable long id, @Valid Seating seating, BindingResult bindingResult, Model model){
+        var seatingDb= seatingRepo.findById(seating.getId());
+
+        if(seatingDb.isPresent()){
+            var eventDb= eventRepo.findById(seatingDb.get().getEvent().getId());
+            model.addAttribute("event", eventDb.get());
+            if(bindingResult.hasErrors()){
+                return "/seatings/edit";
+            }
+
+            if (seating.getSeatingDateTime().toLocalDate().isBefore(eventDb.get().getStartDate())) {
+                bindingResult.rejectValue("seatingDateTime", "error.seatingDateTime", "Seating date cannot be before event start date");
+                return "seatings/create";
+            }
+            if (seating.getSeatingDateTime().plusMinutes(seating.getSeatingDuration()).toLocalDate().isAfter(eventDb.get().getEndDate())) {
+                bindingResult.rejectValue("seatingDateTime", "error.seatingDateTime", "Seating duration cannot exceed event end date");
+                return "seatings/create";
+            }
+            if (seating.getSeatingDuration()<1) {
+                bindingResult.rejectValue("seatingDuration", "error.seatingDuration", "Duration cannot be less than 1");
+                return "seatings/create";
+            }
+
+            seatingDb.get().setSeatingDateTime(seating.getSeatingDateTime());
+            seatingDb.get().setSeatingDuration(seating.getSeatingDuration());
+            try{seatingRepo.save(seatingDb.get());} catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+
+            return "redirect:/event/" + eventDb.get().getId();
+        }
+
+
+        return "redirect:/event/" + eventRepo.findById(seatingDb.get().getEvent().getId());
+
+
+    }
+
+
 }

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <title>Edit Seating</title>
+  <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+</head>
+<body>
+<header><div th:insert="~{nav :: navbar}"></div></header>
+<div class="container">
+  <main role="main" class="pb-3">
+    <h4>Edit Seating for <span th:text="${event.name}"></span></h4>
+    <div class="row">
+      <div class="col-md-4">
+        <form th:action="@{/seating/edit/{id}(id=${seating.id})}" method="post" th:object="${seating}">
+          <input type="hidden" th:field="*{id}">
+          <div class="form-group">
+            <label class="control-label">Seating Date and Time:
+              <input type="datetime-local" th:field="*{seatingDateTime}" class="form-control"/>
+            </label>
+            <div class="alert alert-warning" th:errors="*{seatingDateTime}"></div>
+            <label class="control-label">Seating Duration in minutes:
+              <input type="text" th:field="*{seatingDuration}" class="form-control"/>
+            </label>
+            <div class="alert alert-warning" th:errors="*{seatingDuration}"></div>
+          </div>
+          <div class="form-group"><input type="submit" value="Save" class="btn btn-primary"/></div>
+        </form>
+      </div>
+    </div>
+    <div><a th:href="@{/event/{id}(id=${event.id})}">Go Back</a></div>
+  </main>
+</div>
+</body>
+</html>

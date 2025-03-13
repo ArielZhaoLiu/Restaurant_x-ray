@@ -1,4 +1,3 @@
-<!--
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
@@ -12,20 +11,21 @@
       <ul class="navbar-nav flex-grow-1">
         <li class="nav-item"><a class="nav-link" th:href="@{/events}">Events</a></li>
         <li class="nav-item"><a class="nav-link" th:href="@{/layouts}">Layout</a></li>
-       &lt;!&ndash; <li th:unless="${session.loggedIn}" class="nav-item">
+       <!-- <li th:unless="${session.loggedIn}" class="nav-item">
           <a class="nav-link" th:href="@{/login}">Login</a>
         </li>
         <li th:if="${session.loggedIn}" class="nav-item">
           <form th:action="@{/logout}" method="post">
             <input type="submit" value="Logout" class="nav-link"/>
           </form>
-        </li> &ndash;&gt;
+        </li> -->
       </ul>
     </div>
   </nav>
 </div>
 </body>
-</html>-->
+</html>
+<!--
 
 <div th:fragment="navbar">
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -37,4 +37,4 @@
       </ul>
     </div>
   </nav>
-</div>
+</div>-->

@@ -173,13 +173,17 @@ public class EventController {
         LocalDate e;
         var events = eventRepo.findAll();
 
-        if(startDate.isEmpty()) {
-            e = LocalDate.parse(endDate);
-            events = eventRepo.findByEndDateLessThanEqual(e);
+        if(startDate.isEmpty() && endDate.isEmpty() ) {
+            return "redirect:/events";
         }
         else if(endDate.isEmpty()) {
             s = LocalDate.parse(startDate);
             events = eventRepo.findByStartDateGreaterThanEqual(s);
+        }
+        else if (startDate.isEmpty()){
+            e = LocalDate.parse(endDate);
+            events = eventRepo.findByEndDateLessThanEqual(e);
+
         }
         else {
             s = LocalDate.parse(startDate);

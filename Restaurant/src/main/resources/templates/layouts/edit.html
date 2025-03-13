@@ -14,7 +14,7 @@
             <!-- Layout Edit Form -->
             <div class="col-md-4">
                 <h2>Edit Layout</h2>
-                <form th:action="@{/layout/edit}" method="post" th:object="${layout}">
+                <form th:action="@{/layout/edit/{layoutId}(layoutId=${layout.id})}" method="post" th:object="${layout}">
                     <input type="hidden" th:field="*{id}"/>
                     <div class="form-group">
                         <label class="control-label">Name:
@@ -50,7 +50,7 @@
                         <td><span th:text="${table.numberOfSeats}"></span></td>
                         <td>
                             <form th:action="@{/diningTable/delete/{id}(id=${table.id})}" method="post">
-                                <input type="hidden" name="layoutId" th:value="${layout.id}"/>
+                                <input type="hidden" name="layoutId" th:field="${layout.id}"/>
                                 <button  type="submit" class="btn btn-danger">Remove</button>
                             </form>
                         </td>

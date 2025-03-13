@@ -1,5 +1,6 @@
 package nbcc.restaurant.controllers;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import nbcc.restaurant.entities.DiningTable;
 import nbcc.restaurant.entities.Layout;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.time.LocalDateTime;
 
 @Controller
 public class LayoutController {
@@ -63,14 +66,23 @@ public class LayoutController {
         return "redirect:/layouts";
     }
 
-    @PostMapping("/layout/edit")
-    public String edit(@Valid Layout layout, BindingResult bindingResult, Model model) {
+    @PostMapping("/layout/edit/{id}")
+    public String edit(@Valid Layout layout, BindingResult bindingResult, Model model, @PathVariable long id) {
 
         if (bindingResult.hasErrors()) {
             return "/layouts/edit";
         }
-        layoutRepo.save(layout);
-        return "redirect:/layouts";
+
+        var dbOptionalLayout = layoutRepo.findById(id);
+        if (dbOptionalLayout.isEmpty()){
+            throw new EntityNotFoundException("Layout with id " + id + " not found");
+        }
+        var dbLayout = dbOptionalLayout.get();
+        dbLayout.setName(layout.getName());
+        dbLayout.setDescription(layout.getDescription());
+
+        layoutRepo.save(dbLayout);
+        return "redirect:/layout/edit/" + id;
     }
 
     @PostMapping("/diningTable/create/{layoutId}")
@@ -81,7 +93,13 @@ public class LayoutController {
         }
 
         Layout layout = layoutRepo.findById(layoutId).orElse(null);
+        if (layout == null) {
+            return "redirect:/error";
+        }
+
+        layout.setLastUpdatedDate();
         diningTable.setLayout(layout);     // if no this, layout will be null
+        layoutRepo.save(layout);
 
         // want to: if table number already existed in database, let user choose another one, or alert user will cover the previous one.
 //        var tableId = diningTable.getId();
@@ -89,6 +107,7 @@ public class LayoutController {
 //        if(entity.isPresent()) {
 //            return "/layouts/edit";
 //        }
+
 
         diningTableRepo.save(diningTable);
 

@@ -123,9 +123,12 @@ public class LayoutController {
     public String delete (Model model, @PathVariable long id){
 
         var entity = layoutRepo.findById(id);
+        var tables = diningTableRepo.findByLayoutId(id);
 
         if(entity.isPresent()) { // this means the entity was found in the database
             model.addAttribute("layout", entity.get());
+            model.addAttribute("diningTables", tables);
+
             return "/layouts/delete";
         }
 
@@ -134,6 +137,9 @@ public class LayoutController {
 
     @PostMapping("/layout/delete/{id}")
     public String delete(@PathVariable long id) {
+
+        var tables = diningTableRepo.findByLayoutId(id);
+        diningTableRepo.deleteAll(tables);
 
         layoutRepo.deleteById(id);
         return "redirect:/layouts";

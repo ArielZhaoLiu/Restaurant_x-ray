@@ -28,9 +28,24 @@
                     <span th:text="*{createdDate}"></span>
                 </dd>
             </dl>
+            <!-- Dinning Table detail -->
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Table Number</th>
+                    <th>Number of Seats</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="table : ${diningTables}">
+                    <td><span th:text="${table.id}"></span></td>
+                    <td><span th:text="${table.numberOfSeats}"></span></td>
+                </tr>
+                </tbody>
+            </table>
             <form th:action="@{/layout/delete/{id}(id=${layout.id})}" method="post">
                 <div class="form-group">
-                    <input type="submit" value="Delete" class="btn btn-primary"/>
+                    <input type="submit" value="Delete" class="btn btn-warning"/>
                 </div>
             </form>
             <div><a th:href="@{/layouts}">Go Back</a></div>

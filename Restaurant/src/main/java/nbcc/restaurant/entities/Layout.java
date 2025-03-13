@@ -3,6 +3,7 @@ package nbcc.restaurant.entities;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
@@ -21,6 +22,7 @@ public class Layout {
 
     private String description;
 
+    @CreationTimestamp
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate createdDate;
 

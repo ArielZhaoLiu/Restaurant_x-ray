@@ -73,8 +73,8 @@ public class LayoutController {
         return "redirect:/layouts";
     }
 
-    @PostMapping("/diningTable/create")
-    public String tableCreate(@RequestParam long layoutId, @Valid DiningTable diningTable, BindingResult bindingResult, Model model) {
+    @PostMapping("/diningTable/create/{layoutId}")
+    public String tableCreate(@PathVariable long layoutId, @Valid DiningTable diningTable, BindingResult bindingResult, Model model) {
 
         if (bindingResult.hasErrors()) {
             return "/layouts/edit";
@@ -82,6 +82,14 @@ public class LayoutController {
 
         Layout layout = layoutRepo.findById(layoutId).orElse(null);
         diningTable.setLayout(layout);     // if no this, layout will be null
+
+        // want to: if table number already existed in database, let user choose another one, or alert user will cover the previous one.
+//        var tableId = diningTable.getId();
+//        var entity = diningTableRepo.findById(tableId);
+//        if(entity.isPresent()) {
+//            return "/layouts/edit";
+//        }
+
         diningTableRepo.save(diningTable);
 
         return "redirect:/layout/edit/" + layoutId;
@@ -89,19 +97,23 @@ public class LayoutController {
 
 
     @PostMapping("/diningTable/delete/{id}")
-    public String tableDelete(@PathVariable long id, @RequestParam long layoutId) {
+    public String tableDelete(@PathVariable long id) {
+
+        var table = diningTableRepo.findById(id).orElse(null);
 
         diningTableRepo.deleteById(id);
-        return "redirect:/layout/edit/" + layoutId;
+        return "redirect:/layout/edit/" + table.getLayout().getId();
     }
 
     @GetMapping("/layout/{id}")
     public String detail(Model model, @PathVariable long id){
 
         var entity = layoutRepo.findById(id);
+        var tables = diningTableRepo.findByLayoutId(id);
 
         if(entity.isPresent()) { // this means the entity was found in the database
             model.addAttribute("layout", entity.get());
+            model.addAttribute("diningTables", tables);
             return "/layouts/detail";
         }
         return "redirect:/layouts";

@@ -77,7 +77,6 @@ public class SeatingController {
     public String delete(Model model, @PathVariable long id){
         var seating= seatingRepo.findById(id);
 
-
         if(seating.isPresent()){
             var eventDb= eventRepo.findById(seating.get().getEvent().getId());
             if(eventDb.isPresent()) {

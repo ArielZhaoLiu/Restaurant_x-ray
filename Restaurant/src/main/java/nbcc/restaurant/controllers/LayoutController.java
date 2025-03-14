@@ -173,6 +173,4 @@ public class LayoutController {
         return "redirect:/layouts";
     }
 
-
-
 }

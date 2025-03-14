@@ -127,4 +127,12 @@ public class Event {
     public void setSeatings(List<Seating> seatings) {
         this.seatings = seatings;
     }
+
+    public LocalDate getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDate updatedAt) {
+        this.updatedAt = updatedAt;
+    }
 }

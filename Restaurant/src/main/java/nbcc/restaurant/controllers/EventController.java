@@ -31,6 +31,7 @@ public class EventController {
     public String getAll(Model model){
         var values = eventRepo.findAll();
         model.addAttribute( "events", values);
+        model.addAttribute("dateNow", LocalDate.now());
         return "/events/index";
     }
 
@@ -103,8 +104,10 @@ public class EventController {
 
         if(entity.isPresent()){
             model.addAttribute("event", entity.get());
+            model.addAttribute("dateNow", LocalDate.now());
             return "/events/delete";
         }
+
         return "redirect:/events";
     }
 

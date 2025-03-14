@@ -94,7 +94,7 @@ public class LayoutController {
 
         Layout layout = layoutRepo.findById(layoutId).orElse(null);
         if (layout == null) {
-            return "redirect:/error";
+            return "/layouts/edit";
         }
 
         layout.setLastUpdatedDate();
@@ -120,8 +120,17 @@ public class LayoutController {
 
         var table = diningTableRepo.findById(id).orElse(null);
 
+        var layoutId = table.getLayout().getId();
+
+        Layout layout = layoutRepo.findById(layoutId).orElse(null);
+        if (layout == null) {
+            return "/layouts/edit";
+        }
+
+        layout.setLastUpdatedDate();
+
         diningTableRepo.deleteById(id);
-        return "redirect:/layout/edit/" + table.getLayout().getId();
+        return "redirect:/layout/edit/" + layoutId;
     }
 
     @GetMapping("/layout/{id}")

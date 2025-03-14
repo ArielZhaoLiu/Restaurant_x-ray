@@ -3,9 +3,12 @@ package nbcc.restaurant.entities;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -21,11 +24,13 @@ public class Layout {
 
     private String description;
 
+    @CreationTimestamp
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate createdDate;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate lastUpdatedDate;
+    @UpdateTimestamp
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+    private LocalDateTime lastUpdatedDate;
 
     @OneToMany(mappedBy = "layout", fetch = FetchType.LAZY)
     private List<DiningTable> diningTables;
@@ -71,12 +76,12 @@ public class Layout {
         this.createdDate = createdDate;
     }
 
-    public LocalDate getLastUpdatedDate() {
+    public LocalDateTime getLastUpdatedDate() {
         return lastUpdatedDate;
     }
 
-    public void setLastUpdatedDate(LocalDate lastUpdatedDate) {
-        this.lastUpdatedDate = lastUpdatedDate;
+    public void setLastUpdatedDate() {
+        this.lastUpdatedDate = LocalDateTime.now();
     }
 
     public List<DiningTable> getDiningTables() {

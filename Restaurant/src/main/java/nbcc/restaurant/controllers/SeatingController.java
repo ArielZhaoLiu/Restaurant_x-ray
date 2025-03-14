@@ -55,7 +55,7 @@ public class SeatingController {
                return "seatings/create";
            }
            if (seating.getSeatingDateTime().plusMinutes(seating.getSeatingDuration()).toLocalDate().isAfter(event.getEndDate())) {
-               bindingResult.rejectValue("seatingDateTime", "error.seatingDateTime", "Seating duration cannot exceed event end date");
+               bindingResult.rejectValue("seatingDuration", "error.seatingDuration", "Seating duration cannot exceed event end date");
                return "seatings/create";
            }
             if (seating.getSeatingDuration()<1) {

@@ -14,7 +14,7 @@
             <!-- Layout Edit Form -->
             <div class="col-md-4">
                 <h2>Edit Layout</h2>
-                <form th:action="@{/layout/edit}" method="post" th:object="${layout}">
+                <form th:action="@{/layout/edit/{layoutId}(layoutId=${layout.id})}" method="post" th:object="${layout}">
                     <input type="hidden" th:field="*{id}"/>
                     <div class="form-group">
                         <label class="control-label">Name:
@@ -25,12 +25,6 @@
                         <label class="control-label">Description:
                             <input th:field="*{description}" class="form-control"/>
                         </label>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label">Created Date:
-                            <input type="date" th:field="*{createdDate}" class="form-control" readonly/>
-                        </label>
-                        <div class="alert alert-warning" th:errors="*{createdDate}"></div>
                     </div>
                     <div class="form-group">
                         <input type="submit" value="Save" class="btn btn-primary"/>
@@ -45,7 +39,7 @@
                 <table class="table">
                     <thead>
                     <tr>
-                        <th>Table ID</th>
+                        <th>Table Number</th>
                         <th>Number of Seats</th>
                         <th>Manage</th>
                     </tr>
@@ -56,7 +50,7 @@
                         <td><span th:text="${table.numberOfSeats}"></span></td>
                         <td>
                             <form th:action="@{/diningTable/delete/{id}(id=${table.id})}" method="post">
-                                <input type="hidden" name="layoutId" th:value="${layout.id}"/>
+                                <input type="hidden" name="layoutId" th:field="${layout.id}"/>
                                 <button  type="submit" class="btn btn-danger">Remove</button>
                             </form>
                         </td>
@@ -66,10 +60,10 @@
 
                 <!-- Add New Dining Table Form -->
                 <h3>Add New Dining Table</h3>
-                <form th:action="@{/diningTable/create}" method="post" th:object="${newDiningTable}">
+                <form th:action="@{/diningTable/create/{layoutId}(layoutId=${layout.id})}" method="post" th:object="${newDiningTable}">
                     <input type="hidden" name="layoutId" th:value="${layout.id}" />
                     <div class="form-group">
-                        <label class="control-label">Table ID:
+                        <label class="control-label">Table Number:
                             <input th:field="*{id}" class="form-control"/>
                         </label>
                     </div>

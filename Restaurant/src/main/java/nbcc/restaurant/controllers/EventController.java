@@ -188,6 +188,7 @@ public class EventController {
         else {
             s = LocalDate.parse(startDate);
             e = LocalDate.parse(endDate);
+
             events = eventRepo.findByStartDateGreaterThanEqualAndEndDateLessThanEqual(s, e);
         }
 

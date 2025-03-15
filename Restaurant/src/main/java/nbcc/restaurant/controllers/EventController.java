@@ -30,8 +30,10 @@ public class EventController {
     @GetMapping({"/", "events"})
     public String getAll(Model model){
         var values = eventRepo.findAll();
+
         model.addAttribute( "events", values);
         model.addAttribute("dateNow", LocalDate.now());
+
         return "/events/index";
     }
 

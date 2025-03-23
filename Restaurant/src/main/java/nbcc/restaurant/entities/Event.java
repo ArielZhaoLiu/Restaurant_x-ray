@@ -43,6 +43,10 @@ public class Event {
     @OneToMany(mappedBy = "event", fetch = FetchType.LAZY)
     private List<Seating> seatings;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "layout_id", foreignKey = @ForeignKey(name = "FK_EVENT_LAYOUT"))
+    private Layout layout;
+
     private boolean isArchived = false;
 
     public Event() {
@@ -135,4 +139,8 @@ public class Event {
     public void setUpdatedAt(LocalDate updatedAt) {
         this.updatedAt = updatedAt;
     }
+
+    public Layout getLayout() { return layout; }
+
+    public void setLayout(Layout layout) { this.layout = layout; }
 }

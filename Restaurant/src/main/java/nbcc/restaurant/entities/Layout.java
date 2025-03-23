@@ -35,6 +35,9 @@ public class Layout {
     @OneToMany(mappedBy = "layout", fetch = FetchType.LAZY)
     private List<DiningTable> diningTables;
 
+    @OneToMany(mappedBy = "layout", fetch = FetchType.LAZY)
+    private List<Event> events;
+
     public Layout() {
     }
 
@@ -80,9 +83,7 @@ public class Layout {
         return lastUpdatedDate;
     }
 
-    public void setLastUpdatedDate() {
-        this.lastUpdatedDate = LocalDateTime.now();
-    }
+    public void setLastUpdatedDate() { this.lastUpdatedDate = LocalDateTime.now(); }
 
     public List<DiningTable> getDiningTables() {
         return diningTables;
@@ -92,4 +93,7 @@ public class Layout {
         this.diningTables = diningTables;
     }
 
+    public List<Event> getEvents() { return events; }
+
+    public void setEvents(List<Event> events) { this.events = events; }
 }

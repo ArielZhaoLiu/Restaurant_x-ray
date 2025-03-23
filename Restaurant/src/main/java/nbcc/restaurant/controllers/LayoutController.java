@@ -5,6 +5,7 @@ import jakarta.validation.Valid;
 import nbcc.restaurant.entities.DiningTable;
 import nbcc.restaurant.entities.Layout;
 import nbcc.restaurant.repositories.DiningTableRepository;
+import nbcc.restaurant.repositories.EventRepository;
 import nbcc.restaurant.repositories.LayoutRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,7 +13,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDateTime;
 
@@ -21,10 +21,12 @@ public class LayoutController {
 
     private final LayoutRepository layoutRepo;
     private final DiningTableRepository diningTableRepo;
+    private final EventRepository eventRepository;
 
-    public LayoutController(LayoutRepository layoutRepo, DiningTableRepository diningTableRepo) {
+    public LayoutController(LayoutRepository layoutRepo, DiningTableRepository diningTableRepo, EventRepository eventRepository) {
         this.layoutRepo = layoutRepo;
         this.diningTableRepo = diningTableRepo;
+        this.eventRepository = eventRepository;
     }
 
     @GetMapping("/layouts")
@@ -152,10 +154,17 @@ public class LayoutController {
 
         var entity = layoutRepo.findById(id);
         var tables = diningTableRepo.findByLayoutId(id);
+        var layout = layoutRepo.findById(id).orElse(null);
 
         if(entity.isPresent()) { // this means the entity was found in the database
-            model.addAttribute("layout", entity.get());
-            model.addAttribute("diningTables", tables);
+            if (layout != null) {
+                if(layout.getEvents() != null && !layout.getEvents().isEmpty()){
+                    layout.setArchived(true);
+                }
+
+                model.addAttribute("layout", entity.get());
+                model.addAttribute("diningTables", tables);
+            }
 
             return "/layouts/delete";
         }
@@ -167,9 +176,18 @@ public class LayoutController {
     public String delete(@PathVariable long id) {
 
         var tables = diningTableRepo.findByLayoutId(id);
-        diningTableRepo.deleteAll(tables);
+        var layout = layoutRepo.findById(id).orElse(null);
 
-        layoutRepo.deleteById(id);
+        if (layout != null) {
+            if(layout.getEvents() != null && !layout.getEvents().isEmpty()){
+                layout.setArchived(true);
+                layoutRepo.save(layout);
+            } else {
+                diningTableRepo.deleteAll(tables);
+                layoutRepo.deleteById(id);
+            }
+        }
+
         return "redirect:/layouts";
     }
 

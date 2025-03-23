@@ -21,7 +21,7 @@
       </tr>
       </thead>
       <tbody>
-      <tr th:each="layout : ${layouts}">
+      <tr th:unless="${layout.isArchived()}" th:each="layout : ${layouts}">
         <td><span th:text="${layout.name}"></span></td>
         <td><span th:text="${layout.description}"></span></td>
         <td><span th:text="${layout.createdDate}"></span></td>

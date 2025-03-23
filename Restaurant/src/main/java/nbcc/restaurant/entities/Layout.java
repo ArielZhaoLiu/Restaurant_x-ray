@@ -24,6 +24,8 @@ public class Layout {
 
     private String description;
 
+    private boolean archived = false;
+
     @CreationTimestamp
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate createdDate;
@@ -96,4 +98,12 @@ public class Layout {
     public List<Event> getEvents() { return events; }
 
     public void setEvents(List<Event> events) { this.events = events; }
+
+    public boolean isArchived() {
+        return archived;
+    }
+
+    public void setArchived(boolean archived) {
+        this.archived = archived;
+    }
 }

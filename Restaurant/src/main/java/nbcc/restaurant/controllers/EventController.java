@@ -3,9 +3,11 @@ package nbcc.restaurant.controllers;
 import jakarta.validation.Valid;
 import nbcc.restaurant.entities.Event;
 import nbcc.restaurant.entities.Menu;
+import nbcc.restaurant.entities.Layout;
 import nbcc.restaurant.entities.Seating;
 import nbcc.restaurant.repositories.EventRepository;
 import nbcc.restaurant.repositories.MenuRepository;
+import nbcc.restaurant.repositories.LayoutRepository;
 import nbcc.restaurant.repositories.SeatingRepository;
 import nbcc.restaurant.services.MenuService;
 import org.springframework.stereotype.Controller;
@@ -23,16 +25,22 @@ public class EventController {
     private final EventRepository eventRepo;
     private final SeatingRepository seatingRepo;
     private final MenuService menuService;
+    private final LayoutRepository layoutRepo;
 
-    public EventController(EventRepository eventRepo, SeatingRepository seatingRepository, MenuService menuService) {
+    public EventController(EventRepository eventRepo, SeatingRepository seatingRepository, MenuService menuService, LayoutRepository layoutRepo) {
         this.eventRepo = eventRepo;
         this.seatingRepo = seatingRepository;
         this.menuService = menuService;
+        this.layoutRepo = layoutRepo;
     }
 
     @ModelAttribute("menus")
     public List<Menu> getAllMenus() {
         return menuService.getAll();
+    }
+    @ModelAttribute("layouts") // adds this attribute to all get and post mappings
+    public List<Layout> getAllLayouts() {
+        return layoutRepo.findAll();
     }
 
     @GetMapping({"/", "events"})
@@ -44,7 +52,6 @@ public class EventController {
 
         return "/events/index";
     }
-
 
     @GetMapping({ "/event/create"})
     public String create(Model model){

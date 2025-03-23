@@ -6,6 +6,7 @@ import nbcc.restaurant.entities.Menu;
 import nbcc.restaurant.entities.Seating;
 import nbcc.restaurant.repositories.EventRepository;
 import nbcc.restaurant.repositories.MenuRepository;
+import nbcc.restaurant.repositories.LayoutRepository;
 import nbcc.restaurant.repositories.SeatingRepository;
 import nbcc.restaurant.services.MenuService;
 import org.springframework.stereotype.Controller;
@@ -23,11 +24,13 @@ public class EventController {
     private final EventRepository eventRepo;
     private final SeatingRepository seatingRepo;
     private final MenuService menuService;
+    private final LayoutRepository layoutRepo;
 
-    public EventController(EventRepository eventRepo, SeatingRepository seatingRepository, MenuService menuService) {
+    public EventController(EventRepository eventRepo, SeatingRepository seatingRepository, MenuService menuService, LayoutRepository layoutRepo) {
         this.eventRepo = eventRepo;
         this.seatingRepo = seatingRepository;
         this.menuService = menuService;
+        this.layoutRepo = layoutRepo;
     }
 
     @ModelAttribute("menus")
@@ -50,6 +53,7 @@ public class EventController {
     public String create(Model model){
 
         model.addAttribute("event", new Event());
+        model.addAttribute("layouts", layoutRepo.findAll());
         return "/events/create";
     }
 

@@ -3,6 +3,7 @@ package nbcc.restaurant.controllers;
 import jakarta.validation.Valid;
 import nbcc.restaurant.entities.Event;
 import nbcc.restaurant.entities.Menu;
+import nbcc.restaurant.entities.Layout;
 import nbcc.restaurant.entities.Seating;
 import nbcc.restaurant.repositories.EventRepository;
 import nbcc.restaurant.repositories.MenuRepository;
@@ -34,8 +35,12 @@ public class EventController {
     }
 
     @ModelAttribute("menus")
-    public List<Menu> getAllCategories() {
+    public List<Menu> getAllMenus() {
         return menuService.getAll();
+    }
+    @ModelAttribute("layouts") // adds this attribute to all get and post mappings
+    public List<Layout> getAllLayouts() {
+        return layoutRepo.findAll();
     }
 
     @GetMapping({"/", "events"})
@@ -48,12 +53,10 @@ public class EventController {
         return "/events/index";
     }
 
-
     @GetMapping({ "/event/create"})
     public String create(Model model){
 
         model.addAttribute("event", new Event());
-        model.addAttribute("layouts", layoutRepo.findAll());
         return "/events/create";
     }
 

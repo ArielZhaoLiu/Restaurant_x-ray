@@ -68,9 +68,11 @@
           <div class="form-group">
             <label class="control-label">Layout:
               <select class="form-control" th:field="*{layout}">
+                <option value="">-- Please Select One Layout --</option>
                 <option th:each="layout : ${layouts}"
                         th:value="${layout.id}"
                         th:text="${layout.name}">
+                </option>
               </select>
             </label>
             <div class="alert alert-warning" th:errors="*{layout}"></div>

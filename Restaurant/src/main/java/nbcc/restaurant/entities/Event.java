@@ -43,6 +43,7 @@ public class Event {
     @OneToMany(mappedBy = "event", fetch = FetchType.LAZY)
     private List<Seating> seatings;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "layout_id", foreignKey = @ForeignKey(name = "FK_EVENT_LAYOUT"))
     private Layout layout;

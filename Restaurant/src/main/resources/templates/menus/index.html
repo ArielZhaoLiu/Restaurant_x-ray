@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <title>Menu</title>
+  <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+</head>
+<body>
+<header th:insert="~{nav :: navbar}">
+
+</header>
+<div class="container">
+  <main role="main" class="pb-3">
+    <a th:href="@{/menu/create}">Add Menu</a>
+    <table class="table" th:unless="${menus ==null}">
+      <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Manage</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="menu :${menus}">
+        <td><span th:text="${menu.name}"></span></td>
+        <td><span th:text="${menu.description}"></span></td>
+        <td><a th:href="@{/menu/{id}(id=${menu.id})}">Details</a>
+          | <a th:href="@{/menu/edit/{id}(id=${menu.id})}">Edit</a>
+          | <a th:href="@{/menu/delete/{id}(id=${menu.id})}">Delete</a></td>
+      </tr>
+      </tbody>
+    </table>
+  </main>
+</div>
+</body>
+</html>

@@ -2,18 +2,19 @@ package nbcc.restaurant.controllers;
 
 import jakarta.validation.Valid;
 import nbcc.restaurant.entities.Event;
+import nbcc.restaurant.entities.Menu;
 import nbcc.restaurant.entities.Seating;
 import nbcc.restaurant.repositories.EventRepository;
+import nbcc.restaurant.repositories.MenuRepository;
 import nbcc.restaurant.repositories.SeatingRepository;
+import nbcc.restaurant.services.MenuService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 
 @Controller
@@ -21,10 +22,17 @@ public class EventController {
 
     private final EventRepository eventRepo;
     private final SeatingRepository seatingRepo;
+    private final MenuService menuService;
 
-    public EventController(EventRepository eventRepo, SeatingRepository seatingRepository) {
+    public EventController(EventRepository eventRepo, SeatingRepository seatingRepository, MenuService menuService) {
         this.eventRepo = eventRepo;
         this.seatingRepo = seatingRepository;
+        this.menuService = menuService;
+    }
+
+    @ModelAttribute("menus")
+    public List<Menu> getAllCategories() {
+        return menuService.getAll();
     }
 
     @GetMapping({"/", "events"})

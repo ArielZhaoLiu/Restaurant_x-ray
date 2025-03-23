@@ -47,6 +47,10 @@ public class Event {
     @JoinColumn(name = "layout_id", foreignKey = @ForeignKey(name = "FK_EVENT_LAYOUT"))
     private Layout layout;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="menu_id", foreignKey = @ForeignKey(name="FK_EVENT_MENU"))
+    private Menu menu;
+
     private boolean isArchived = false;
 
     public Event() {
@@ -143,4 +147,12 @@ public class Event {
     public Layout getLayout() { return layout; }
 
     public void setLayout(Layout layout) { this.layout = layout; }
+
+    public Menu getMenu() {
+        return menu;
+    }
+
+    public void setMenu(Menu menu) {
+        this.menu = menu;
+    }
 }

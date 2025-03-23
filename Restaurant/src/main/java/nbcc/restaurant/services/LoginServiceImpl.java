@@ -113,7 +113,7 @@ public class LoginServiceImpl implements LoginService {
         if(login != null) {
             var lastActivity = LocalDateTime.now();
             log.info("Updating last activity for {} to {}", login.getUserDetail().getUsername(), lastActivity);
-            login.setLasActivity(LocalDateTime.now());
+            login.setLastUsed(LocalDateTime.now());
             userLoginRepository.save(login);
         }
     }

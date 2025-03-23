@@ -17,7 +17,7 @@ public class UserLogin {
     private UserDetail userDetail;
 
     @Column(nullable = false)
-    private LocalDateTime lasActivity;
+    private LocalDateTime lastUsed;
 
 
     private LocalDateTime loggedOut;
@@ -34,7 +34,7 @@ public class UserLogin {
     public UserLogin(UserDetail userDetail) {
         this.userDetail = userDetail;
         this.active = true;
-        this.lasActivity = LocalDateTime.now();
+        this.lastUsed = LocalDateTime.now();
         this.id = UUID.randomUUID().toString();
     }
 
@@ -54,12 +54,12 @@ public class UserLogin {
         this.userDetail = userDetail;
     }
 
-    public LocalDateTime getLasActivity() {
-        return lasActivity;
+    public LocalDateTime getLastUsed() {
+        return lastUsed;
     }
 
-    public void setLasActivity(LocalDateTime lasActivity) {
-        this.lasActivity = lasActivity;
+    public void setLastUsed(LocalDateTime lasActivity) {
+        this.lastUsed = lasActivity;
     }
 
     public boolean isActive() {

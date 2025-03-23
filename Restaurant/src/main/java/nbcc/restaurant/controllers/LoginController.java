@@ -54,15 +54,18 @@ public class LoginController {
     }
 
     @PostMapping("/registration")
-    public String registration(@Valid UserDetail userDetail, BindingResult bindingResult, Model model) {
+    public String registration(@Valid UserDetail userDetail, BindingResult result, Model model) {
         var username = userDetail.getUsername();
 
         if(username == null || username.isBlank()){
+           result.rejectValue("username", "error.username", "Username cannot be blank");
+
             return "registration";
         }
 
         var exists = userService.usernameExists(userDetail.getUsername());
         if(exists){
+            result.rejectValue("username", "error.username", "Username exist already");
             return "registration"; // already exists
         }
 
@@ -71,7 +74,13 @@ public class LoginController {
         var UserFirstName = userDetail.getFirstName();
         var UserLastName = userDetail.getLastName();
 
-        if (userPassword == null || userPassword.isBlank() || userEmail == null || userEmail.isBlank()){
+        if (userPassword == null || userPassword.isBlank()){
+            result.rejectValue("password", "error.password", "Password cannot be blank");
+            return "registration";
+        }
+
+        if (userEmail == null || userEmail.isBlank()){
+            result.rejectValue("email", "error.email", "Email cannot be blank");
             return "registration";
         }
 

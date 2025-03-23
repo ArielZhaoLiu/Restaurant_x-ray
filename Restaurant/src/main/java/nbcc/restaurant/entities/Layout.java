@@ -24,7 +24,7 @@ public class Layout {
 
     private String description;
 
-    private boolean archived;
+    private boolean archived = false;
 
     @CreationTimestamp
     @DateTimeFormat(pattern = "yyyy-MM-dd")

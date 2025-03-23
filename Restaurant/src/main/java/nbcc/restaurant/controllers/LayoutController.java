@@ -154,11 +154,17 @@ public class LayoutController {
 
         var entity = layoutRepo.findById(id);
         var tables = diningTableRepo.findByLayoutId(id);
-        var events = eventRepository.findAll();
+        var layout = layoutRepo.findById(id).orElse(null);
 
         if(entity.isPresent()) { // this means the entity was found in the database
-            model.addAttribute("layout", entity.get());
-            model.addAttribute("diningTables", tables);
+            if (layout != null) {
+                if(layout.getEvents() != null && !layout.getEvents().isEmpty()){
+                    layout.setArchived(true);
+                }
+
+                model.addAttribute("layout", entity.get());
+                model.addAttribute("diningTables", tables);
+            }
 
             return "/layouts/delete";
         }
@@ -170,9 +176,18 @@ public class LayoutController {
     public String delete(@PathVariable long id) {
 
         var tables = diningTableRepo.findByLayoutId(id);
-        diningTableRepo.deleteAll(tables);
+        var layout = layoutRepo.findById(id).orElse(null);
 
-        layoutRepo.deleteById(id);
+        if (layout != null) {
+            if(layout.getEvents() != null && !layout.getEvents().isEmpty()){
+                layout.setArchived(true);
+                layoutRepo.save(layout);
+            } else {
+                diningTableRepo.deleteAll(tables);
+                layoutRepo.deleteById(id);
+            }
+        }
+
         return "redirect:/layouts";
     }
 

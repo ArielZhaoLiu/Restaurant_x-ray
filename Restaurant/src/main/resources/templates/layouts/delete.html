@@ -9,8 +9,49 @@
     <div th:insert="~{nav :: navbar}"></div>
 </header>
 <div class="container">
-
-    <main th:if="" role="main" class="pb-3">
+    <main th:if="${layout.isArchived()}" role="main" class="pb-3">
+        <h1>Archive</h1>
+        <h3>This Layout is currently associated with an Event. Do you want to Archive it?</h3>
+        <div><h4>Layout</h4>
+            <hr/>
+            <dl class="row" th:object="${layout}">
+                <dt class="col-sm-2">Name</dt>
+                <dd class="col-sm-10">
+                    <span th:text="*{name}"></span>
+                </dd>
+                <dt class="col-sm-2">Description</dt>
+                <dd class="col-sm-10">
+                    <span th:text="*{description}"></span>
+                </dd>
+                <dt class="col-sm-2">Created Date</dt>
+                <dd class="col-sm-10">
+                    <span th:text="*{createdDate}"></span>
+                </dd>
+            </dl>
+            <!-- Dinning Table detail -->
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Table Number</th>
+                    <th>Number of Seats</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="table : ${diningTables}">
+                    <td><span th:text="${table.id}"></span></td>
+                    <td><span th:text="${table.numberOfSeats}"></span></td>
+                </tr>
+                </tbody>
+            </table>
+            <form th:action="@{/layout/delete/{id}(id=${layout.id})}" method="post">
+                <div class="form-group">
+                    <input type="submit" value="Archive" class="btn btn-warning"/>
+                </div>
+            </form>
+            <div><a th:href="@{/layouts}">Go Back</a></div>
+        </div>
+    </main>
+    <main th:unless="${layout.isArchived()}" role="main" class="pb-3">
         <h1>Delete</h1>
         <h3>Are you sure you want to delete this?</h3>
         <div><h4>Layout</h4>

@@ -5,6 +5,7 @@ import jakarta.validation.Valid;
 import nbcc.restaurant.entities.DiningTable;
 import nbcc.restaurant.entities.Layout;
 import nbcc.restaurant.repositories.DiningTableRepository;
+import nbcc.restaurant.repositories.EventRepository;
 import nbcc.restaurant.repositories.LayoutRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,10 +21,12 @@ public class LayoutController {
 
     private final LayoutRepository layoutRepo;
     private final DiningTableRepository diningTableRepo;
+    private final EventRepository eventRepository;
 
-    public LayoutController(LayoutRepository layoutRepo, DiningTableRepository diningTableRepo) {
+    public LayoutController(LayoutRepository layoutRepo, DiningTableRepository diningTableRepo, EventRepository eventRepository) {
         this.layoutRepo = layoutRepo;
         this.diningTableRepo = diningTableRepo;
+        this.eventRepository = eventRepository;
     }
 
     @GetMapping("/layouts")
@@ -151,6 +154,7 @@ public class LayoutController {
 
         var entity = layoutRepo.findById(id);
         var tables = diningTableRepo.findByLayoutId(id);
+        var events = eventRepository.findAll();
 
         if(entity.isPresent()) { // this means the entity was found in the database
             model.addAttribute("layout", entity.get());

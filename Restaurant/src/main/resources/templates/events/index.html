@@ -8,7 +8,7 @@
 <header th:insert="~{nav :: navbar}"></header>
 <div class="container">
     <main role="main" class="pb-3">
-        <a th:href="@{/event/create}">Add Event</a>
+        <a th:if="${session.loggedIn}" th:href="@{/event/create}">Add Event</a>
         <table class="table" th:unless="${events ==null}">
             <thead>
             <tr>
@@ -29,8 +29,8 @@
                 <td><span th:text="${event.endDate}"></span></td>
                 <td><span th:text="${event.price}"></span></td>
                 <td><a th:href="@{/event/{id}(id=${event.id})}">Details</a>
-                    | <a th:href="@{/event/edit/{id}(id=${event.id})}">Edit</a>
-                    | <a th:href="@{/event/delete/{id}(id=${event.id})}">Delete</a></td>
+                    <span th:if="${session.loggedIn}">| <a th:href="@{/event/edit/{id}(id=${event.id})}">Edit</a>
+                    | <a th:href="@{/event/delete/{id}(id=${event.id})}">Delete</a></span></td>
 
             </tr>
             </tbody>

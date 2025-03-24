@@ -9,6 +9,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 public class Seating {
@@ -33,6 +34,9 @@ public class Seating {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="event_id", foreignKey = @ForeignKey(name="FK_EVENT_SEATING"))
     private Event event;
+
+    @OneToMany(mappedBy = "seating", fetch = FetchType.LAZY)
+    private List<ReservationRequest> reservationRequests;
 
     public Seating() {
     }
@@ -81,5 +85,13 @@ public class Seating {
 
     public void setEvent(Event event) {
         this.event = event;
+    }
+
+    public List<ReservationRequest> getReservationRequests() {
+        return reservationRequests;
+    }
+
+    public void setReservationRequests(List<ReservationRequest> reservationRequests) {
+        this.reservationRequests = reservationRequests;
     }
 }

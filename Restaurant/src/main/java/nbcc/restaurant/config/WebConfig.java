@@ -20,24 +20,18 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
 
-        registry.addInterceptor(loginInterceptor).addPathPatterns("/event/**");
         registry.addInterceptor(loginInterceptor).addPathPatterns(
-                "/seating/delete/**",
-                "/seating/edit/**",
-                "/seating/create/**");
+                "/event/delete/**",
+                "/event/edit/**",
+                "/event/create/**");
         registry.addInterceptor(loginInterceptor).addPathPatterns(
-                "/layout/delete/**",
-                "/layout/edit/**",
-                "/layout/create/**");
+                "/seating/**");
         registry.addInterceptor(loginInterceptor).addPathPatterns(
-                "/menu/delete/**",
-                "/menu/edit/**",
-                "/menu/create/**");
+                "/layout/**");
         registry.addInterceptor(loginInterceptor).addPathPatterns(
-                "/menuItem/delete/**",
-                "/menuItem/edit/**",
-                "/menuItem/create/**");
-
+                "/menu/**");
+        registry.addInterceptor(loginInterceptor).addPathPatterns(
+                "/menuItem");
 
         registry.addInterceptor(userActivityInterceptor);
     }

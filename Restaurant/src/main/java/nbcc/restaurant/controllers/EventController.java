@@ -17,26 +17,25 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Objects;
 
 @Controller
 public class EventController {
 
     private final EventRepository eventRepo;
     private final SeatingRepository seatingRepo;
-    private final MenuService menuService;
+    private final MenuRepository menuRepo;
     private final LayoutRepository layoutRepo;
 
-    public EventController(EventRepository eventRepo, SeatingRepository seatingRepository, MenuService menuService, LayoutRepository layoutRepo) {
+    public EventController(EventRepository eventRepo, SeatingRepository seatingRepository, MenuRepository menuRepo, LayoutRepository layoutRepo) {
         this.eventRepo = eventRepo;
         this.seatingRepo = seatingRepository;
-        this.menuService = menuService;
+        this.menuRepo = menuRepo;
         this.layoutRepo = layoutRepo;
     }
 
     @ModelAttribute("menus")
     public List<Menu> getAllMenus() {
-        return menuService.getAll();
+        return menuRepo.findAll();
     }
     @ModelAttribute("layouts") // adds this attribute to all get and post mappings
     public List<Layout> getAllLayouts() {

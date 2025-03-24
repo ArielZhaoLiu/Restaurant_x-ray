@@ -40,6 +40,7 @@ public class Event {
     @UpdateTimestamp
     private LocalDate updatedAt;
 
+    @NotNull
     @OneToMany(mappedBy = "event", fetch = FetchType.LAZY)
     private List<Seating> seatings;
 
@@ -48,6 +49,7 @@ public class Event {
     @JoinColumn(name = "layout_id", foreignKey = @ForeignKey(name = "FK_EVENT_LAYOUT"))
     private Layout layout;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="menu_id", foreignKey = @ForeignKey(name="FK_EVENT_MENU"))
     private Menu menu;

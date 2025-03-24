@@ -57,6 +57,7 @@
           <div class="form-group">
             <label class="control-label"> Menu:
               <select class="form-control" th:field="*{menu}">
+                <option value="">-- Please Select One Menu --</option>
                 <option
                         th:each="menu : ${menus}"
                         th:value="${menu.id}"

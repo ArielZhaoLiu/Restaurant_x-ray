@@ -165,7 +165,6 @@ public class EventController {
 
     @PostMapping({ "/event/edit"})
     public String edit(@Valid Event event, BindingResult bindingResult, Model model){
-        var eventDb = eventRepo.findById(event.getId());
 
         if(bindingResult.hasErrors()){
             return "/events/edit";
@@ -176,13 +175,12 @@ public class EventController {
             return "/events/edit";
         }
 
-        eventDb.get().setStartDate(event.getStartDate());
-        eventDb.get().setEndDate(event.getEndDate());
-        eventDb.get().setName(event.getName());
-        eventDb.get().setDescription(event.getDescription());
-        eventDb.get().setPrice(event.getPrice());
-        eventDb.get().setLayout(event.getLayout());
-        eventRepo.save(eventDb.get());
+        event.setStartDate(event.getStartDate());
+        event.setEndDate(event.getEndDate());
+        event.setName(event.getName());
+        event.setDescription(event.getDescription());
+        event.setPrice(event.getPrice());
+        eventRepo.save(event);
         return "redirect:/events";
 
     }

@@ -2,6 +2,8 @@ package nbcc.restaurant.controllers;
 
 import jakarta.validation.Valid;
 import nbcc.restaurant.entities.Menu;
+import nbcc.restaurant.repositories.EventRepository;
+import nbcc.restaurant.repositories.MenuItemRepository;
 import nbcc.restaurant.services.MenuService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,11 +18,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping({"/menu"})
 public class MenuController {
+
     private final MenuService menuService;
+    private final MenuItemRepository menuItemRepo;
+    private final EventRepository eventRepo;
     private static final Logger log = LoggerFactory.getLogger(MenuController.class);
 
-    public MenuController(MenuService menuService) {
+    public MenuController(MenuService menuService, MenuItemRepository menuItemRepo, EventRepository eventRepo) {
         this.menuService = menuService;
+        this.menuItemRepo = menuItemRepo;
+        this.eventRepo = eventRepo;
     }
 
     @GetMapping
@@ -78,28 +85,53 @@ public class MenuController {
         var entity= menuService.getById(id);
 
         if(entity.isPresent()){
+            var menuItems = menuItemRepo.findByMenuId(id);
+            entity.get().setMenuItems(menuItems);
             model.addAttribute("menu", entity.get());
             return "/menus/detail";
         }
         return "redirect:/menu";
+
+
     }
 
     @GetMapping({ "/delete/{id}"})
     public String delete(Model model, @PathVariable long id){
         var entity= menuService.getById(id);
+        var event = eventRepo.findByMenuId(id);
+        boolean empty;
 
-        if(entity.isPresent()){
-            model.addAttribute("menu", entity.get());
-            return "/menus/delete";
-        }
+            if (entity.isPresent()) {
+                model.addAttribute("menu", entity.get());
+                if(event.isEmpty()) {
+                    empty = true;
+                    model.addAttribute("eventEmpty", empty);
+                }
+                else{
+                    empty = false;
+                    model.addAttribute("eventEmpty", empty);
+                }
+                return "/menus/delete";
+            }
+
         return "redirect:/menu";
     }
 
     @PostMapping({ "/delete/{id}"})
-    public String delete( @PathVariable long id){
-        System.out.printf("Delete menu with id: %d\n", id);
-        menuService.delete(id);
-        System.out.println("Menu with id: " + id + " deleted successfully");
+    public String delete( @PathVariable long id) {
+        var entity = menuService.getById(id);
+
+            if (entity.isPresent()) {
+                var menu = entity.get();
+                if (!menu.getMenuItems().isEmpty()) {
+                    var menuItems = menuItemRepo.findByMenuId(id);
+                    menuItemRepo.deleteAll(menuItems);
+                }
+                menuService.delete(id);
+            }
+
+
+
         return "redirect:/menu";
     }
 }

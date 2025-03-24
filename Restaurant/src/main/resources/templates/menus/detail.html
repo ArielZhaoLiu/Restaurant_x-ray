@@ -34,13 +34,13 @@
 
           <td><span th:text="${menuItem.name}"></span></td>
           <td><span th:text="${menuItem.description}"></span></td>
-          <td><a th:href="@{/menuItem/edit/{id}(id=${menuItem.id})}">Edit</a>
-            | <a th:href="@{/menuItem/delete/{id}(id=${menuItem.id})}">Delete</a>
+          <td><span th:if="${session.loggedIn}"><a th:href="@{/menuItem/edit/{id}(id=${menuItem.id})}">Edit</a>
+            | <a th:href="@{/menuItem/delete/{id}(id=${menuItem.id})}">Delete</a></span>
           </td>
         </tr>
         </tbody>
       </table>
-      <div><a th:href="@{/menu}">Go Back</a> || <a th:href="@{/menuItem/create/{id}(id=${menu.id})}">Add Menu Item</a></div>
+      <div><a th:href="@{/menu}">Go to Menu List</a> <span th:if="${session.loggedIn}">|| <a th:href="@{/menuItem/create/{id}(id=${menu.id})}">Add Menu Item</a></span></div>
     </div>
 
     </main>

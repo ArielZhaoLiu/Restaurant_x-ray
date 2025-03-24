@@ -5,11 +5,12 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.annotations.CreationTimestamp;
 
+
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
-public class Menu {
+public class MenuItem {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -22,13 +23,18 @@ public class Menu {
     @CreationTimestamp
     private LocalDateTime createdDateTime;
 
-    @OneToMany(mappedBy = "menu", fetch = FetchType.LAZY)
-    private List<Event> events;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="menu_id", foreignKey = @ForeignKey(name="FK_MENU_MENUITEM"))
+    private Menu menu;
 
-    @OneToMany(mappedBy = "menu", fetch = FetchType.LAZY)
-    private List<MenuItem> menuItems;
+    public MenuItem() {
+    }
 
-    public Menu() {
+    public MenuItem(String name, String description, LocalDateTime createdDateTime, Menu menu) {
+        this.name = name;
+        this.description = description;
+        this.createdDateTime = createdDateTime;
+        this.menu = menu;
     }
 
     public long getId() {
@@ -63,19 +69,11 @@ public class Menu {
         this.createdDateTime = createdDateTime;
     }
 
-    public List<Event> getEvents() {
-        return events;
+    public Menu getMenu() {
+        return menu;
     }
 
-    public void setEvents(List<Event> events) {
-        this.events = events;
-    }
-
-    public List<MenuItem> getMenuItems() {
-        return menuItems;
-    }
-
-    public void setMenuItems(List<MenuItem> menuItems) {
-        this.menuItems = menuItems;
+    public void setMenu(Menu menu) {
+        this.menu = menu;
     }
 }

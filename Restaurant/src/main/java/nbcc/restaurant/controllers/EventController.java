@@ -181,6 +181,7 @@ public class EventController {
         eventDb.get().setName(event.getName());
         eventDb.get().setDescription(event.getDescription());
         eventDb.get().setPrice(event.getPrice());
+        eventDb.get().setLayout(event.getLayout());
         eventRepo.save(eventDb.get());
         return "redirect:/events";
 

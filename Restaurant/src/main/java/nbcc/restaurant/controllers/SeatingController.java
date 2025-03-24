@@ -148,22 +148,17 @@ public class SeatingController {
 
 
         return "redirect:/event/" + eventRepo.findById(seatingDb.get().getEvent().getId());
-
-
     }
 
     @GetMapping({ "/seating/reserve/{id}"})
-    public String reserve(@PathVariable long id,  Seating seating, Model model){
+    public String reserve(@PathVariable long id, Model model){
 
-        var seatingDb= seatingRepo.findById(seating.getId());
-        var reservation = new ReservationRequest();
-        var event= eventRepo.findById(id);
-
+        var seatingDb= seatingRepo.findById(id);
 
         if(seatingDb.isPresent()){
+            var reservation = new ReservationRequest();
             reservation.setSeating(seatingDb.get());
             model.addAttribute("reservation", reservation);
-            model.addAttribute("event", event);
         }
 
         return "/reservationRequests/create";

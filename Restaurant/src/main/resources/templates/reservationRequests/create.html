@@ -10,7 +10,7 @@
   <main role="main" class="pb-3">
     <div class="row">
       <div class="col-md-4">
-        <form th:action="@{/product/create}" method = "post" th:object="${reservation}">
+        <form th:action="@{/seating/reserve/{id}(id=${reservation.seating.id})}" method = "post" th:object="${reservation}">
           <div class="form-group">
             <label class="control-label">First Name:
               <input th:field="*{firstName}" class="form-control"/>
@@ -36,12 +36,12 @@
             <div class="alert alert-warning" th:errors="*{groupSize}"></div>
           </div>
           <div class="form-group">
-            <input type="submit" value="Request" class="btn btn-primary"/>
+            <input type="submit" value="Request Reservation" class="btn btn-primary"/>
           </div>
         </form>
       </div>
     </div>
-    <div><a th:href="@{/event/{id}(id=${event.get().id})}">Go Back</a></div>
+    <div><a th:href="@{/products}">Go Back</a></div>
   </main>
 </div>
 </body>

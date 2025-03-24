@@ -18,9 +18,32 @@
         <dt class="col-sm-2"> Description</dt>
         <dd class="col-sm-10"><span  th:text="*{description}"></span></dd>
       </dl>
-      <div><a th:href="@{/menu}">Go Back</a></div>
+
+      <h4>Items</h4>
+      <hr>
+      <table class="table" th:unless="${menu.getMenuItems() ==null}">
+        <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Manage</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="menuItem : ${menu.menuItems}">
+
+          <td><span th:text="${menuItem.name}"></span></td>
+          <td><span th:text="${menuItem.description}"></span></td>
+          <td><a th:href="@{/menuItem/edit/{id}(id=${menuItem.id})}">Edit</a>
+            | <a th:href="@{/menuItem/delete/{id}(id=${menuItem.id})}">Delete</a>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      <div><a th:href="@{/menu}">Go Back</a> || <a th:href="@{/menuItem/create/{id}(id=${menu.id})}">Add Menu Item</a></div>
     </div>
-  </main>
+
+    </main>
 </div>
 </body>
 </html>

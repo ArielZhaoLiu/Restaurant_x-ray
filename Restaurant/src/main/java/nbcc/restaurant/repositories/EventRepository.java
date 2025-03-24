@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface EventRepository extends JpaRepository<Event, Long> {
-
+    List<Event> findByMenuId(Long menuId);
     List<Event> findByStartDateGreaterThanEqual(LocalDate startDate);
     List<Event> findByEndDateLessThanEqual(LocalDate endDate);
     List<Event> findByStartDateGreaterThanEqualAndEndDateLessThanEqual(LocalDate startDate, LocalDate endDate);

@@ -29,6 +29,15 @@ public class WebConfig implements WebMvcConfigurer {
                 "/layout/delete/**",
                 "/layout/edit/**",
                 "/layout/create/**");
+        registry.addInterceptor(loginInterceptor).addPathPatterns(
+                "/menu/delete/**",
+                "/menu/edit/**",
+                "/menu/create/**");
+        registry.addInterceptor(loginInterceptor).addPathPatterns(
+                "/menuItem/delete/**",
+                "/menuItem/edit/**",
+                "/menuItem/create/**");
+
 
         registry.addInterceptor(userActivityInterceptor);
     }

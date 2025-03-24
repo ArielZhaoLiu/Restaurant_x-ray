@@ -23,19 +23,19 @@ public class EventController {
 
     private final EventRepository eventRepo;
     private final SeatingRepository seatingRepo;
-    private final MenuRepository menuRepo;
+    private final MenuService menuService;
     private final LayoutRepository layoutRepo;
 
-    public EventController(EventRepository eventRepo, SeatingRepository seatingRepository, MenuRepository menuRepo, LayoutRepository layoutRepo) {
+    public EventController(EventRepository eventRepo, SeatingRepository seatingRepository, MenuService menuService, LayoutRepository layoutRepo) {
         this.eventRepo = eventRepo;
         this.seatingRepo = seatingRepository;
-        this.menuRepo = menuRepo;
+        this.menuService = menuService;
         this.layoutRepo = layoutRepo;
     }
 
     @ModelAttribute("menus")
     public List<Menu> getAllMenus() {
-        return menuRepo.findAll();
+        return menuService.getAll();
     }
     @ModelAttribute("layouts") // adds this attribute to all get and post mappings
     public List<Layout> getAllLayouts() {
@@ -174,11 +174,6 @@ public class EventController {
             return "/events/edit";
         }
 
-        event.setStartDate(event.getStartDate());
-        event.setEndDate(event.getEndDate());
-        event.setName(event.getName());
-        event.setDescription(event.getDescription());
-        event.setPrice(event.getPrice());
         eventRepo.save(event);
         return "redirect:/events";
 

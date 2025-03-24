@@ -64,6 +64,7 @@
                 <td><span th:text="${seating.seatingDuration}"></span></td>
                 <td><a th:href="@{/seating/edit/{id}(id=${seating.id})}">Edit</a>
                     | <a th:href="@{/seating/delete/{id}(id=${seating.id})}">Delete</a>
+                    | <a th:href="@{/seating/reserve/{id}(id=${seating.id})}">Reserve</a>
                 </td>
         </tr>
         </tbody>

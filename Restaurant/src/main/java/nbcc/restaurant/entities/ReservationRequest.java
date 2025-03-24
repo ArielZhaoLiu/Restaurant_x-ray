@@ -28,7 +28,6 @@ public class ReservationRequest {
     @NotBlank
     private String email;
 
-    @NotNull
     private int groupSize;
 
     public ReservationRequest() {

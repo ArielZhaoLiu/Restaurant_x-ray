@@ -2,6 +2,7 @@ package nbcc.restaurant.controllers;
 
 import jakarta.validation.Valid;
 import nbcc.restaurant.entities.Event;
+import nbcc.restaurant.entities.ReservationRequest;
 import nbcc.restaurant.entities.Seating;
 import nbcc.restaurant.repositories.EventRepository;
 import nbcc.restaurant.repositories.SeatingRepository;
@@ -147,8 +148,20 @@ public class SeatingController {
 
 
         return "redirect:/event/" + eventRepo.findById(seatingDb.get().getEvent().getId());
+    }
 
+    @GetMapping({ "/seating/reserve/{id}"})
+    public String reserve(@PathVariable long id, Model model){
 
+        var seatingDb= seatingRepo.findById(id);
+
+        if(seatingDb.isPresent()){
+            var reservation = new ReservationRequest();
+            reservation.setSeating(seatingDb.get());
+            model.addAttribute("reservation", reservation);
+        }
+
+        return "/reservationRequests/create";
     }
 
 

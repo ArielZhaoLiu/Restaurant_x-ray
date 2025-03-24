@@ -174,6 +174,11 @@ public class EventController {
             return "/events/edit";
         }
 
+        event.setStartDate(event.getStartDate());
+        event.setEndDate(event.getEndDate());
+        event.setName(event.getName());
+        event.setDescription(event.getDescription());
+        event.setPrice(event.getPrice());
         eventRepo.save(event);
         return "redirect:/events";
 

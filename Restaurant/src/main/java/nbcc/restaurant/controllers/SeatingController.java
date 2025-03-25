@@ -160,6 +160,7 @@ public class SeatingController {
         reservation.setSeating(seatingDb.get());
         model.addAttribute("reservation", reservation);
         model.addAttribute("event", eventDb.get());
+        model.addAttribute("seating", seatingDb.get());
 
         return "/reservationRequests/create";
     }

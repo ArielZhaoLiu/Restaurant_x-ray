@@ -17,7 +17,7 @@ public class ReservationRequest {
     private Seating seating;
 
     @NotNull
-    @NotBlank
+    @NotBlank(message = "First name is required")
     private String firstName;
 
     @NotNull

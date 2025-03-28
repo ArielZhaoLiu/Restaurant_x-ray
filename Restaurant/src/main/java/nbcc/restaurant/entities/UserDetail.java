@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.Email;
 
 @Entity
 public class UserDetail {
@@ -16,6 +17,8 @@ public class UserDetail {
     private String password;
     private String firstName;
     private String lastName;
+
+    @Email
     private String email;
 
     public UserDetail() {

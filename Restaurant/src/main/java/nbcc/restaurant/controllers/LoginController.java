@@ -57,6 +57,10 @@ public class LoginController {
     public String registration(@Valid UserDetail userDetail, BindingResult result, Model model) {
         var username = userDetail.getUsername();
 
+        if(result.hasErrors()){
+            return "registration";
+        }
+
         if(username == null || username.isBlank()){
            result.rejectValue("username", "error.username", "Username cannot be blank");
 

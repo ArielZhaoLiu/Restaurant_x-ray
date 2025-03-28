@@ -12,6 +12,7 @@
         <li class="nav-item"><a class="nav-link" th:href="@{/events}">Events</a></li>
           <li th:if="${session.loggedIn}" class="nav-item"><a class="nav-link" th:href="@{/layouts}">Layout</a></li>
           <li th:if="${session.loggedIn}" class="nav-item"><a class="nav-link" th:href="@{/menu}">Menus</a></li>
+          <li th:if="${session.loggedIn}" class="nav-item"><a class="nav-link" th:href="@{/reservations}">Reservations</a></li>
        <li th:unless="${session.loggedIn}" class="nav-item">
           <a class="nav-link" th:href="@{/login}">Login</a>
         </li>

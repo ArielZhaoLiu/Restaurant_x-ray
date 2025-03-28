@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <title>Layouts</title>
+  <link th:href="@{/css/bootstrap.css}" rel="stylesheet"/>
+</head>
+<body>
+<header>
+  <div th:insert="~{nav :: navbar}"></div>
+</header>
+<div class="container">
+  <main role="main" class="pb-3">
+    <table class="table" th:unless="${reservations == null}">
+      <thead>
+      <tr>
+        <th>Event</th>
+        <th>Seating Start Time</th>
+        <th>Seating Duration(m)</th>
+        <th>First Name</th>
+        <th>Group Size</th>
+        <th>Price</th>
+        <th>Manage</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="reservation : ${reservations}">
+        <td><span th:text="*{reservation.seating.getEvent().name}"></span></td>
+        <td><span th:text="*{reservation.seating.seatingDateTime}"></span></td>
+        <td><span th:text="*{reservation.seating.seatingDuration}"></span></td>
+        <td><span th:text="*{reservation.firstName}"></span></td>
+        <td><span th:text="*{reservation.groupSize}"></span></td>
+        <td><span th:text="*{reservation.seating.getEvent().price}"></span></td>
+        <td>
+<!--          <a th:href="@{/layout/{id}(id=${layout.id})}">Details</a> |-->
+<!--          <a th:href="@{/layout/edit/{id}(id=${layout.id})}">Edit</a> |-->
+<!--          <a th:href="@{/layout/delete/{id}(id=${layout.id})}">Delete</a>-->
+        </td>
+
+      </tr>
+      </tbody>
+    </table>
+  </main>
+</div>
+</body>
+</html>

@@ -65,4 +65,11 @@ public class ReservationRequestController {
        // return "redirect:/event/" + eventDb.getId();
     }
 
+    @GetMapping("/reservations")
+    public String getAll(Model model) {
+        var values = reservationRequestRepo.findAll();
+        model.addAttribute("reservations", values);
+        return "/reservationRequests/index";
+    }
+
 }

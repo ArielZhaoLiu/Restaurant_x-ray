@@ -150,20 +150,4 @@ public class SeatingController {
         return "redirect:/event/" + eventRepo.findById(seatingDb.get().getEvent().getId());
     }
 
-    @GetMapping({ "/seating/reserve/{id}"})
-    public String reserve(@PathVariable long id, Model model){
-
-        var seatingDb= seatingRepo.findById(id);
-        var eventDb= eventRepo.findById(seatingDb.get().getEvent().getId());
-
-        var reservation = new ReservationRequest();
-        reservation.setSeating(seatingDb.get());
-        model.addAttribute("reservation", reservation);
-        model.addAttribute("event", eventDb.get());
-        model.addAttribute("seating", seatingDb.get());
-
-        return "/reservationRequests/create";
-    }
-
-
 }

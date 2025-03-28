@@ -27,21 +27,35 @@ public class ReservationRequestController {
         this.eventRepo = eventRepository;
     }
 
+    @GetMapping({ "/seating/reserve/{id}"})
+    public String reserve(@PathVariable long id, Model model){
+
+        var seatingDb= seatingRepo.findById(id);
+        var eventDb= eventRepo.findById(seatingDb.get().getEvent().getId());
+
+        var reservation = new ReservationRequest();
+        reservation.setSeating(seatingDb.get());
+        model.addAttribute("reservation", reservation);
+        model.addAttribute("event", eventDb.get());
+        model.addAttribute("seating", seatingDb.get());
+
+        return "/reservationRequests/create";
+    }
+
     @PostMapping({ "/seating/reserve/{seating_id}"})
-    public String requestReservation(@ModelAttribute("reservation") @Valid ReservationRequest reservationRequest,
+    public String reserve(@ModelAttribute("reservation") @Valid ReservationRequest reservationRequest,
                                      BindingResult bindingResult,
                                      @PathVariable long seating_id, Model model){
 
         var seating = seatingRepo.findById(seating_id).orElse(null);
-        var eventDb= eventRepo.findById(seating.getEvent().getId()).orElse(null);
+        var eventDb= seating.getEvent();
 
         reservationRequest.setSeating(seating);
 
-        model.addAttribute("event", eventDb);
-        model.addAttribute("seating", seating);
-
         if (bindingResult.hasErrors()) {
 
+            model.addAttribute("event", eventDb);
+            model.addAttribute("seating", seating);
             return "reservationRequests/create";
         }
 

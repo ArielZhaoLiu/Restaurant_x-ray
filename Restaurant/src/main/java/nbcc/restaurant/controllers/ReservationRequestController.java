@@ -61,7 +61,8 @@ public class ReservationRequestController {
 
         reservationRequestRepo.save(reservationRequest);
 
-        return "redirect:/event/" + eventDb.getId();
+        return "reservationRequests/reservationConfirmationPage";
+       // return "redirect:/event/" + eventDb.getId();
     }
 
 }

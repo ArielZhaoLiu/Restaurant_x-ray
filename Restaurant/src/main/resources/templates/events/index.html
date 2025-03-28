@@ -29,9 +29,13 @@
                 <td><span th:text="${event.startDate}"></span></td>
                 <td><span th:text="${event.endDate}"></span></td>
                 <td><span th:text="${event.price}"></span></td>
-                <td><a th:href="@{/event/{id}(id=${event.id})}">Details</a>
+                <td>
+                    <a th:href="@{/event/{id}(id=${event.id})}">Details</a>
                     <span th:if="${session.loggedIn}">| <a th:href="@{/event/edit/{id}(id=${event.id})}">Edit</a>
-                    | <a th:href="@{/event/delete/{id}(id=${event.id})}">Delete</a></span></td>
+                    | <a th:href="@{/event/delete/{id}(id=${event.id})}">Delete</a>
+                    </span>
+                    | <a th:href="@{/event/{id}(id=${event.id})}">Reserve</a>
+                </td>
 
             </tr>
             </tbody>

@@ -154,12 +154,13 @@ public class SeatingController {
     public String reserve(@PathVariable long id, Model model){
 
         var seatingDb= seatingRepo.findById(id);
+        var eventDb= eventRepo.findById(seatingDb.get().getEvent().getId());
 
-        if(seatingDb.isPresent()){
-            var reservation = new ReservationRequest();
-            reservation.setSeating(seatingDb.get());
-            model.addAttribute("reservation", reservation);
-        }
+        var reservation = new ReservationRequest();
+        reservation.setSeating(seatingDb.get());
+        model.addAttribute("reservation", reservation);
+        model.addAttribute("event", eventDb.get());
+        model.addAttribute("seating", seatingDb.get());
 
         return "/reservationRequests/create";
     }

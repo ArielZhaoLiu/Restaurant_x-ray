@@ -3,7 +3,6 @@ package nbcc.restaurant.controllers;
 import jakarta.validation.Valid;
 import nbcc.restaurant.entities.ReservationRequest;
 import nbcc.restaurant.entities.ReservationStatus;
-import nbcc.restaurant.entities.Seating;
 import nbcc.restaurant.repositories.EventRepository;
 import nbcc.restaurant.repositories.ReservationRequestRepository;
 import nbcc.restaurant.repositories.SeatingRepository;

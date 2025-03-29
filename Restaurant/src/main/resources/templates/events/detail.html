@@ -48,7 +48,6 @@
         </thead>
         <tbody>
         <tr th:each="seating : ${event.seatings}">
-
                 <td>
                   <span th:if="${event.startDate == event.endDate}">
                     <span th:text="${#temporals.format(seating.seatingDateTime, 'HH:mm')}"></span>
@@ -73,7 +72,6 @@
         </tr>
         </tbody>
       </table>
-
       <div><a th:href="@{/events}">Go Back</a> <span th:if="${session.loggedIn}">|| <a th:href="@{/seating/create/{id}(id=${event.id})}">Add Seating</a></span></div>
     </div>
   </main>

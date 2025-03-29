@@ -179,7 +179,6 @@ public class EventController {
 
     }
 
-
     @PostMapping("/event/filter")
     public String filter(String startDate, String endDate, Model model) {
         LocalDate s;

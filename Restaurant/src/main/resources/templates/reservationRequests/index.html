@@ -10,15 +10,39 @@
 </header>
 <div class="container">
   <main role="main" class="pb-3">
+    <form method="get" th:action="@{/reservations}">
+        <label class="control-label">
+          <select class="form-control" name="eventId">
+            <option value="">All Events</option>
+            <option th:each="event : ${events}"
+                    th:value="${event.id}"
+                    th:text="${event.name}"
+                    th:selected="${selectedEvent == event.id}">
+          </select>
+        </label>
+
+        <label class="control-label">
+          <select class="form-control" name="status">
+            <option value="">All Status</option>
+            <option th:each="statu : ${status}"
+                    th:value="${statu}"
+                    th:text="${statu}"
+                    th:selected="${selectedStatus == statu}">
+          </select>
+        </label>
+        <button type="submit"  class="btn btn-primary">Filter</button>
+    </form>
+
     <table class="table" th:unless="${reservations == null}">
       <thead>
       <tr>
-        <th>Event</th>
-        <th>Seating Start Time</th>
+        <th>Event Name</th>
+        <th>Seating Start Date & Time</th>
         <th>Seating Duration(m)</th>
-        <th>First Name</th>
+        <th>Name of Reservation</th>
         <th>Group Size</th>
         <th>Price</th>
+        <th>Status</th>
         <th>Manage</th>
       </tr>
       </thead>
@@ -27,9 +51,10 @@
         <td><span th:text="*{reservation.seating.getEvent().name}"></span></td>
         <td><span th:text="*{reservation.seating.seatingDateTime}"></span></td>
         <td><span th:text="*{reservation.seating.seatingDuration}"></span></td>
-        <td><span th:text="*{reservation.firstName}"></span></td>
+        <td><span th:text="*{reservation.firstName}"></span> <span th:text="*{reservation.lastName}"></span></td>
         <td><span th:text="*{reservation.groupSize}"></span></td>
         <td><span th:text="*{reservation.seating.getEvent().price}"></span></td>
+        <td><span th:text="*{reservation.status}"></span></td>
         <td>
 <!--          <a th:href="@{/layout/{id}(id=${layout.id})}">Details</a> |-->
 <!--          <a th:href="@{/layout/edit/{id}(id=${layout.id})}">Edit</a> |-->

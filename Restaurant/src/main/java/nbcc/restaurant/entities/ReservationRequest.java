@@ -30,6 +30,8 @@ public class ReservationRequest {
 
     private int groupSize;
 
+    private ReservationStatus status = ReservationStatus.PENDING;
+
     public ReservationRequest() {
     }
 
@@ -86,5 +88,13 @@ public class ReservationRequest {
 
     public void setGroupSize(int groupSize) {
         this.groupSize = groupSize;
+    }
+
+    public ReservationStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(ReservationStatus status) {
+        this.status = status;
     }
 }

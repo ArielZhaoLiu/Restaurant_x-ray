@@ -36,6 +36,8 @@ public class WebConfig implements WebMvcConfigurer {
                 "/menu/create/**");
         registry.addInterceptor(loginInterceptor).addPathPatterns(
                 "/menuItem");
+        registry.addInterceptor(loginInterceptor).addPathPatterns(
+                "/reservations**");
         registry.addInterceptor(userActivityInterceptor);
     }
 }

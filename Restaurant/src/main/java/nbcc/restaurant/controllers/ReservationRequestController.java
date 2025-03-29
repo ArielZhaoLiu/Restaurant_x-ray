@@ -2,6 +2,7 @@ package nbcc.restaurant.controllers;
 
 import jakarta.validation.Valid;
 import nbcc.restaurant.entities.ReservationRequest;
+import nbcc.restaurant.entities.ReservationStatus;
 import nbcc.restaurant.entities.Seating;
 import nbcc.restaurant.repositories.EventRepository;
 import nbcc.restaurant.repositories.ReservationRequestRepository;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import java.util.List;
 
 @Controller
 public class ReservationRequestController {
@@ -51,6 +54,7 @@ public class ReservationRequestController {
         var eventDb= seating.getEvent();
 
         reservationRequest.setSeating(seating);
+        reservationRequest.setStatus(ReservationStatus.PENDING); // by default, is pending
 
         if (bindingResult.hasErrors()) {
 
@@ -66,10 +70,26 @@ public class ReservationRequestController {
     }
 
     @GetMapping("/reservations")
-    public String getAll(Model model) {
-        var values = reservationRequestRepo.findAll();
-        model.addAttribute("reservations", values);
+    public String getAll(Long eventId, ReservationStatus status, Model model) {
+
+        List<ReservationRequest> reservations;
+
+        if (eventId != null && status != null) {
+            reservations = reservationRequestRepo.findBySeating_Event_IdAndStatus(eventId, status);
+        } else if (eventId != null) {
+            reservations = reservationRequestRepo.findBySeating_Event_Id(eventId);
+        } else if (status != null) {
+            reservations = reservationRequestRepo.findByStatus(status);
+        } else {
+            reservations = reservationRequestRepo.findAll();
+        }
+
+        model.addAttribute("reservations", reservations);
+        model.addAttribute("events", eventRepo.findAll());
+        model.addAttribute("selectedEvent", eventId);
+        model.addAttribute("status", ReservationStatus.values());
+        model.addAttribute("selectedStatus", status);
+
         return "/reservationRequests/index";
     }
-
 }

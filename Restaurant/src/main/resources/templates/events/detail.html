@@ -11,24 +11,26 @@
     <div><h4>Event</h4>
       <hr/>
       <dl class="row" th:object="${event}">
-        <dt class="col-sm-2"> Name</dt>
-        <dd class="col-sm-10"><span th:text="*{name}"></span></dd>
-        <dt class="col-sm-2"> Description</dt>
-        <dd class="col-sm-10"><span  th:text="*{description}"></span></dd>
-        <dt class="col-sm-2"> Layout</dt>
-        <dd class="col-sm-10"><span  th:text="*{layout.name}"></span></dd>
-        <dt class="col-sm-2"> Price</dt>
-        <dd class="col-sm-10"><span  th:text="*{price}"></span></dd>
-        <dt class="col-sm-2"> Start Date</dt>
-        <dd class="col-sm-10"><span  th:text="*{startDate}"></span></dd>
-        <dt class="col-sm-2"> End Date</dt>
-        <dd class="col-sm-10"><span  th:text="*{endDate}"></span></dd>
-        <dt class="col-sm-2"> Creation Date</dt>
-        <dd class="col-sm-10"><span  th:text="*{createdDate}"></span></dd>
-        <dt class="col-sm-2"> Last Updated</dt>
-        <dd class="col-sm-10"><span  th:text="*{updatedAt}"></span></dd>
-        <dt class="col-sm-2"> Menu</dt>
-        <dd class="col-sm-10"><a th:href="@{/menu/{id}(id=*{menu.id})}"><span  th:text="*{menu.name}"></span></a></dd>
+        <dt class="col-sm-3"> Name</dt>
+        <dd class="col-sm-9"><span th:text="*{name}"></span></dd>
+        <dt class="col-sm-3"> Description</dt>
+        <dd class="col-sm-9"><span  th:text="*{description}"></span></dd>
+        <dt class="col-sm-3"> Layout</dt>
+        <dd class="col-sm-9"><span  th:text="*{layout.name}"></span></dd>
+        <dt class="col-sm-3"> Number of Tables</dt>
+        <dd class="col-sm-9"><span  th:text="*{layout.diningTables.size()}"></span></dd>
+        <dt class="col-sm-3"> Price</dt>
+        <dd class="col-sm-9"><span  th:text="*{price}"></span></dd>
+        <dt class="col-sm-3"> Start Date</dt>
+        <dd class="col-sm-9"><span  th:text="*{startDate}"></span></dd>
+        <dt class="col-sm-3"> End Date</dt>
+        <dd class="col-sm-9"><span  th:text="*{endDate}"></span></dd>
+        <dt class="col-sm-3"> Creation Date</dt>
+        <dd class="col-sm-9"><span  th:text="*{createdDate}"></span></dd>
+        <dt class="col-sm-3"> Last Updated</dt>
+        <dd class="col-sm-9"><span  th:text="*{updatedAt}"></span></dd>
+        <dt class="col-sm-3"> Menu</dt>
+        <dd class="col-sm-9"><a th:href="@{/menu/{id}(id=*{menu.id})}"><span  th:text="*{menu.name}"></span></a></dd>
       </dl>
       <h4>Seating</h4>
       <hr/>

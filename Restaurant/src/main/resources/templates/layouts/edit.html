@@ -39,14 +39,12 @@
                 <table class="table">
                     <thead>
                     <tr>
-                        <th>Table Number</th>
                         <th>Number of Seats</th>
                         <th>Manage</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr th:each="table : ${diningTables}">
-                        <td><span th:text="${table.id}"></span></td>
                         <td><span th:text="${table.numberOfSeats}"></span></td>
                         <td>
                             <form th:action="@{/diningTable/delete/{id}(id=${table.id})}" method="post">
@@ -62,11 +60,6 @@
                 <h3>Add New Dining Table</h3>
                 <form th:action="@{/diningTable/create/{layoutId}(layoutId=${layout.id})}" method="post" th:object="${newDiningTable}">
                     <input type="hidden" name="layoutId" th:value="${layout.id}" />
-                    <div class="form-group">
-                        <label class="control-label">Table Number:
-                            <input th:field="*{id}" class="form-control"/>
-                        </label>
-                    </div>
                     <div class="form-group">
                         <label class="control-label">Number of Seats:
                             <input th:field="*{numberOfSeats}" class="form-control"/>

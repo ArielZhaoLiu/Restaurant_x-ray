@@ -1,14 +1,16 @@
 package nbcc.restaurant.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 
 @Entity
 public class DiningTable {
 
     @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Min(1)
     private int numberOfSeats;
 
     @ManyToOne(fetch = FetchType.LAZY)

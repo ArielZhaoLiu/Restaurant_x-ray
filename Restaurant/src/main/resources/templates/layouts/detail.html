@@ -34,13 +34,11 @@
       <table class="table">
         <thead>
         <tr>
-          <th>Table Number</th>
           <th>Number of Seats</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="table : ${diningTables}">
-          <td><span th:text="${table.id}"></span></td>
           <td><span th:text="${table.numberOfSeats}"></span></td>
         </tr>
         </tbody>

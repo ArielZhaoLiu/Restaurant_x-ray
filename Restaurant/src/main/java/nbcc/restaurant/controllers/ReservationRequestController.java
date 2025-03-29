@@ -92,4 +92,23 @@ public class ReservationRequestController {
 
         return "/reservationRequests/index";
     }
+
+    @GetMapping("/reservation/{id}")
+    public String detail(Model model, @PathVariable long id){
+
+        var reservation = reservationRequestRepo.findById(id);
+
+        if(reservation.isPresent()) { // this means the entity was found in the database
+
+            var seating = reservation.get().getSeating();
+            var event = seating.getEvent();
+
+            model.addAttribute("seating", seating);
+            model.addAttribute("event", event);
+            model.addAttribute("reservation", reservation.get());
+
+            return "/reservationRequests/detail";
+        }
+        return "redirect:/reservations";
+    }
 }

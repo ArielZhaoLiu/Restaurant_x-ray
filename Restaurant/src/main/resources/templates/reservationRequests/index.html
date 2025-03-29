@@ -43,7 +43,7 @@
         <th>Group Size</th>
         <th>Price</th>
         <th>Status</th>
-        <th>Manage</th>
+        <th></th>
       </tr>
       </thead>
       <tbody>
@@ -56,11 +56,8 @@
         <td><span th:text="*{reservation.seating.getEvent().price}"></span></td>
         <td><span th:text="*{reservation.status}"></span></td>
         <td>
-<!--          <a th:href="@{/layout/{id}(id=${layout.id})}">Details</a> |-->
-<!--          <a th:href="@{/layout/edit/{id}(id=${layout.id})}">Edit</a> |-->
-<!--          <a th:href="@{/layout/delete/{id}(id=${layout.id})}">Delete</a>-->
+          <a th:href="@{/reservation/{id}(id=${reservation.id})}">Select</a>
         </td>
-
       </tr>
       </tbody>
     </table>

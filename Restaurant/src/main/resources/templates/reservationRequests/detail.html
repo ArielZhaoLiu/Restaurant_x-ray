@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <title>Reservation Details</title>
+  <link th:href="@{/css/bootstrap.css}" rel="stylesheet"/>
+</head>
+<body>
+<header>
+  <div th:insert="~{nav :: navbar}"></div>
+</header>
+<div class="container">
+  <main role="main" class="pb-3"><h1>Reservation Details</h1>
+    <div><h4>Event</h4>
+      <hr/>
+      <dl class="row" th:object="${event}">
+        <dt class="col-sm-2"> Name</dt>
+        <dd class="col-sm-10"><span th:text="*{name}"></span></dd>
+        <dt class="col-sm-2"> Description</dt>
+        <dd class="col-sm-10"><span  th:text="*{description}"></span></dd>
+        <dt class="col-sm-2"> Layout</dt>
+        <dd class="col-sm-10"><span  th:text="*{layout.name}"></span></dd>
+        <dt class="col-sm-2"> Price</dt>
+        <dd class="col-sm-10"><span  th:text="*{price}"></span></dd>
+        <dt class="col-sm-2"> Start Date</dt>
+        <dd class="col-sm-10"><span  th:text="*{startDate}"></span></dd>
+        <dt class="col-sm-2"> End Date</dt>
+        <dd class="col-sm-10"><span  th:text="*{endDate}"></span></dd>
+        <!--        <dt class="col-sm-2"> Menu</dt>-->
+        <!--        <dd class="col-sm-10"><a th:href="@{/menu/{id}(id=*{menu.id})}"><span  th:text="*{menu.name}"></span></a></dd>-->
+      </dl>
+      <h4>Seating</h4>
+      <hr/>
+      <dl class="row" th:object="${seating}">
+        <dt class="col-sm-2">Start Date and Time</dt>
+        <dd class="col-sm-10"><span th:text="${#temporals.format(seating.seatingDateTime, 'yyyy-MM-dd HH:mm')}"></span></dd>
+        <dt class="col-sm-2">End Date and Time</dt>
+        <dd class="col-sm-10"><span th:text="${#temporals.format(seating.seatingDateTime.plusMinutes(seating.seatingDuration), 'yyyy-MM-dd HH:mm')}"></span></dd>
+        <dt class="col-sm-2">Duration in Minutes</dt>
+        <dd class="col-sm-10"><span th:text="*{seatingDuration}"></span></dd>
+      </dl>
+      <hr/>
+
+      <dl class="row" th:object="${reservation}">
+        <dt class="col-sm-2">First Name: </dt>
+        <dd class="col-sm-10"><span th:text="*{firstName}"></span></dd>
+        <dt class="col-sm-2">Last Name: </dt>
+        <dd class="col-sm-10"><span th:text="*{lastName}"></span></dd>
+        <dt class="col-sm-2">Email Address: </dt>
+        <dd class="col-sm-10"><span th:text="*{email}"></span></dd>
+        <dt class="col-sm-2">Group Size: </dt>
+        <dd class="col-sm-10"><span th:text="*{groupSize}"></span></dd>
+      </dl>
+    </div>
+    <div><a th:href="@{/reservations}">Go Back</a></div>
+  </main>
+</div>
+</body>
+</html>

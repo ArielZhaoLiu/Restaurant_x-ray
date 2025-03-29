@@ -8,8 +8,9 @@ import java.util.List;
 
 public interface ReservationRequestRepository extends JpaRepository<ReservationRequest, Long> {
 
-    List<ReservationRequest> findBySeating_Event_Id(Long eventId);
-    List<ReservationRequest> findByStatus(ReservationStatus status);
-    List<ReservationRequest> findBySeating_Event_IdAndStatus(long seatingEventId, ReservationStatus status);
+    List<ReservationRequest> findBySeating_Event_IdOrderBySeating_SeatingDateTimeAsc(Long eventId);
+    List<ReservationRequest> findByStatusOrderBySeating_SeatingDateTimeAsc(ReservationStatus status);
+    List<ReservationRequest> findBySeating_Event_IdAndStatusOrderBySeating_SeatingDateTimeAsc(long seatingEventId, ReservationStatus status);
+    List<ReservationRequest> findAllByOrderBySeating_SeatingDateTimeAsc();
 
 }

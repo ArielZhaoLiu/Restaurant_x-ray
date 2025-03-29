@@ -75,13 +75,13 @@ public class ReservationRequestController {
         List<ReservationRequest> reservations;
 
         if (eventId != null && status != null) {
-            reservations = reservationRequestRepo.findBySeating_Event_IdAndStatus(eventId, status);
+            reservations = reservationRequestRepo.findBySeating_Event_IdAndStatusOrderBySeating_SeatingDateTimeAsc(eventId, status);
         } else if (eventId != null) {
-            reservations = reservationRequestRepo.findBySeating_Event_Id(eventId);
+            reservations = reservationRequestRepo.findBySeating_Event_IdOrderBySeating_SeatingDateTimeAsc(eventId);
         } else if (status != null) {
-            reservations = reservationRequestRepo.findByStatus(status);
+            reservations = reservationRequestRepo.findByStatusOrderBySeating_SeatingDateTimeAsc(status);
         } else {
-            reservations = reservationRequestRepo.findAll();
+            reservations = reservationRequestRepo.findAllByOrderBySeating_SeatingDateTimeAsc();
         }
 
         model.addAttribute("reservations", reservations);

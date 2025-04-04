@@ -2,8 +2,10 @@ package nbcc.restaurant.dtos;
 
 import nbcc.restaurant.entities.Event;
 import nbcc.restaurant.entities.Menu;
+import nbcc.restaurant.entities.MenuItem;
 import nbcc.restaurant.entities.Seating;
 import nbcc.restaurant.services.EventService;
+import nbcc.restaurant.services.MenuItemService;
 import nbcc.restaurant.services.MenuService;
 import nbcc.restaurant.services.SeatingService;
 
@@ -15,27 +17,14 @@ public class DTOConverters {
 
     private final SeatingService seatingService;
     private final MenuService menuService;
+    private final MenuItemService menuItemService;
 
-    public DTOConverters(SeatingService seatingService, MenuService menuService) {
+    public DTOConverters(SeatingService seatingService, MenuService menuService, MenuItemService menuItemService) {
         this.seatingService = seatingService;
         this.menuService = menuService;
+        this.menuItemService = menuItemService;
     }
 
-
-
-    public static EventDTO toEventDTO(Event event, List<SeatingDTO> seatings, MenuDTO menu) {
-
-            return new EventDTO(
-                    event.getId(),
-                    event.getName(),
-                    event.getDescription(),
-                    event.getStartDate(),
-                    event.getEndDate(),
-                    event.getPrice(),
-                    seatings,
-                    menu
-            );
-    }
 
     public static SeatingDTO toSeatingDTO(Seating seating) {
         return new SeatingDTO(
@@ -50,6 +39,20 @@ public class DTOConverters {
                 menu.getId(),
                 menu.getName(),
                 menu.getDescription()
+        );
+    }
+
+    public static EventDTO toEventDTO(Event event, List<SeatingDTO> seatings, MenuDTO menu) {
+
+        return new EventDTO(
+                event.getId(),
+                event.getName(),
+                event.getDescription(),
+                event.getStartDate(),
+                event.getEndDate(),
+                event.getPrice(),
+                seatings,
+                menu
         );
     }
 
@@ -75,10 +78,53 @@ public class DTOConverters {
                 }
             }
 
-
             eventDTOS.add(toEventDTO(event, seatingDTOS, menu));
         }
 
         return eventDTOS;
     }
+
+    public static MenuItemDTO toMenuItemDTO(MenuItem menuItem) {
+        return new MenuItemDTO(
+                menuItem.getId(),
+                menuItem.getName(),
+                menuItem.getDescription(),
+                menuItem.getMenu().getId()
+        );
+    }
+
+    public static MenuWithItemDTO toMenuWithItemDTO(Menu menu, Iterable<MenuItem> menuItems) {
+        var menuItemDTOS = new ArrayList<MenuItemDTO>();
+
+        for(var menuItem: menuItems){
+
+            if(menuItem.getMenu().getId() == menu.getId()){
+                menuItemDTOS.add(toMenuItemDTO(menuItem));
+            }
+        }
+        var MenuWithItemDTO = new MenuWithItemDTO(menu.getId(), menu.getName(), menu.getDescription(), menuItemDTOS);
+
+        return MenuWithItemDTO;
+    }
+
+    public static List<MenuWithItemDTO> toMenuWithItemDTOs(Iterable<Menu> menus, Iterable<MenuItem> menuItems) {
+        var MenuWithItemDTOs = new ArrayList<MenuWithItemDTO>();
+
+
+        for(var menu: menus){
+            var menuItemsList = new ArrayList<MenuItem>();
+
+            for (MenuItem menuItem : menuItems) {
+
+                if(menuItem.getMenu().getId() == menu.getId()){
+                    menuItemsList.add(menuItem);
+                }
+            }
+
+            MenuWithItemDTOs.add(toMenuWithItemDTO(menu, menuItemsList));
+        }
+
+        return MenuWithItemDTOs;
+    }
+
 }

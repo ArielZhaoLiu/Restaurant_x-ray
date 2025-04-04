@@ -2,6 +2,7 @@ package nbcc.restaurant.services;
 
 import jakarta.persistence.EntityNotFoundException;
 import nbcc.restaurant.entities.Menu;
+import nbcc.restaurant.entities.Seating;
 import nbcc.restaurant.repositories.MenuRepository;
 import org.springframework.stereotype.Service;
 
@@ -47,6 +48,8 @@ public class MenuService {
     public void delete(Long id){
         menuRepository.deleteById(id);
     }
+
+
 }
 
 

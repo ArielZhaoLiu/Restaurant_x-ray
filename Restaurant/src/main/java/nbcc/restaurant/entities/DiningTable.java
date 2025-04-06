@@ -58,4 +58,12 @@ public class DiningTable {
     public void setReservationRequests(List<ReservationRequest> reservationRequests) {
         this.reservationRequests = reservationRequests;
     }
+
+    public boolean isArchived() {
+        return archived;
+    }
+
+    public void setArchived(boolean archived) {
+        this.archived = archived;
+    }
 }

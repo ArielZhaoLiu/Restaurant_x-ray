@@ -1,5 +1,6 @@
 package nbcc.restaurant.repositories;
 
+import nbcc.restaurant.entities.DiningTable;
 import nbcc.restaurant.entities.ReservationRequest;
 import nbcc.restaurant.entities.ReservationStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,5 +16,6 @@ public interface ReservationRequestRepository extends JpaRepository<ReservationR
 
     List<ReservationRequest> findBySeating_Event_Id(Long eventId);
 
+    ReservationRequest findByAssignedTable(DiningTable assignedTable);
 
 }

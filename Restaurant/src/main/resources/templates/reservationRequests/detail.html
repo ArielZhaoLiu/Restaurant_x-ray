@@ -30,6 +30,7 @@
                       th:value="${table.id}"
                       th:text="${table.numberOfSeats}">
             </select>
+            <span class="alert alert-warning" th:errors="*{assignedTable}"></span>
           </label>
           <button type="submit"  class="btn btn-primary"  th:disabled="${reservation.status != null and reservation.status.name() == 'APPROVED'}">Save</button>
         </form>

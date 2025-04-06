@@ -147,18 +147,44 @@ public class ReservationRequestController {
     }
 
     @PostMapping("/reservation/{id}/edit")
-    public String update(@PathVariable long id, @ModelAttribute ReservationRequest reservation, Model model){
+    public String update(@PathVariable long id, @ModelAttribute("reservation") @Valid ReservationRequest reservation, BindingResult bindingResult, Model model){
 
         var currentReservation = reservationRequestRepo.findById(id).orElse(null);
-        if(currentReservation != null) {
-            currentReservation.setStatus(reservation.getStatus());
-            currentReservation.setAssignedTable(reservation.getAssignedTable());
+        var selectedStatus = reservation.getStatus();
 
-            reservationRequestRepo.save(currentReservation);
+        if (currentReservation !=null) {
+            var selectedTable = reservation.getAssignedTable();
+            if (selectedStatus == ReservationStatus.APPROVED && selectedTable == null) {
+
+                bindingResult.rejectValue("assignedTable", "error.assignedTable", "Must assign an assigned table");
+
+                model.addAttribute("reservation", currentReservation);
+                model.addAttribute("status", ReservationStatus.values());
+                model.addAttribute("selectedStatus", selectedStatus);
+
+                var seating = currentReservation.getSeating();
+                var event = seating.getEvent();
+                var layout = event.getLayout();
+                var tables = layout.getDiningTables();
+                model.addAttribute("seating", seating);
+                model.addAttribute("event", event);
+                model.addAttribute("layout", layout);
+                model.addAttribute("tables", tables);
+
+                return "/reservationRequests/detail";
+            } else if (selectedStatus == ReservationStatus.PENDING || selectedStatus == ReservationStatus.DENIED) {
+                currentReservation.setStatus(reservation.getStatus());
+                currentReservation.setAssignedTable(null);
+                reservationRequestRepo.save(currentReservation);
+            } else {
+                currentReservation.setStatus(reservation.getStatus());
+                currentReservation.setAssignedTable(reservation.getAssignedTable());
+                reservationRequestRepo.save(currentReservation);
+            }
+
         }
 
         return "redirect:/reservation/" + reservation.getId();
-
     }
 
 }

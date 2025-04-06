@@ -16,6 +16,10 @@ public class ReservationRequest {
     @JoinColumn(name = "seating_id", foreignKey = @ForeignKey(name = "FK_RESEREQUEST_SEATING"))
     private Seating seating;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "table_id", foreignKey = @ForeignKey(name = "FK_RESEREQUEST_TABLE"))
+    private DiningTable assignedTable;
+
     @NotNull
     @NotBlank(message = "First name is required")
     private String firstName;
@@ -35,11 +39,12 @@ public class ReservationRequest {
     public ReservationRequest() {
     }
 
-    public ReservationRequest(String firstName, String lastName, String email, int groupSize) {
+    public ReservationRequest(String firstName, String lastName, String email, int groupSize, ReservationStatus status) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.groupSize = groupSize;
+        this.status = status;
     }
 
     public long getId() {
@@ -96,5 +101,13 @@ public class ReservationRequest {
 
     public void setStatus(ReservationStatus status) {
         this.status = status;
+    }
+
+    public DiningTable getAssignedTable() {
+        return assignedTable;
+    }
+
+    public void setAssignedTable(DiningTable assignedTable) {
+        this.assignedTable = assignedTable;
     }
 }

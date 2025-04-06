@@ -3,6 +3,8 @@ package nbcc.restaurant.entities;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 
+import java.util.List;
+
 @Entity
 public class DiningTable {
 
@@ -16,6 +18,11 @@ public class DiningTable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "layout_id", foreignKey = @ForeignKey(name = "FK_DININGTABLE_LAYOUT"))
     private Layout layout;
+
+    @OneToMany(mappedBy = "assignedTable", fetch = FetchType.LAZY)
+    private List<ReservationRequest> reservationRequests;
+
+    private boolean archived = false;
 
     public DiningTable() {
     }
@@ -42,5 +49,13 @@ public class DiningTable {
 
     public void setLayout(Layout layout) {
         this.layout = layout;
+    }
+
+    public List<ReservationRequest> getReservationRequests() {
+        return reservationRequests;
+    }
+
+    public void setReservationRequests(List<ReservationRequest> reservationRequests) {
+        this.reservationRequests = reservationRequests;
     }
 }

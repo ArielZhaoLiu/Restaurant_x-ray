@@ -100,7 +100,7 @@ public class EventController {
         return "redirect:/events";
     }
 
-    @GetMapping({ "/event/{id}"})
+    @GetMapping({ "/event/detail/{id}"})
     public String detail(Model model, @PathVariable long id){
         var entity= eventRepo.findById(id);
 
@@ -109,6 +109,20 @@ public class EventController {
             entity.get().setSeatings(seatings);
             model.addAttribute("event", entity.get());
             return "/events/detail";
+        }
+
+        return "redirect:/events";
+    }
+
+    @GetMapping({ "/event/reserve/{id}"})
+    public String reserve(Model model, @PathVariable long id){
+        var entity= eventRepo.findById(id);
+
+        if(entity.isPresent()){
+            var seatings = seatingRepo.findByEventId(id);
+            entity.get().setSeatings(seatings);
+            model.addAttribute("event", entity.get());
+            return "/events/reserve";
         }
 
         return "redirect:/events";

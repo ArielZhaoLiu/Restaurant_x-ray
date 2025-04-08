@@ -33,7 +33,7 @@ public class ReservationRequestApiController {
     }
 
     @PostMapping
-    public ResponseEntity<RequestDTO> create(@RequestBody @Valid RequestDTO requestDTO) throws Exception {
+    public ResponseEntity<String> create(@RequestBody @Valid RequestDTO requestDTO) throws Exception {
         var event = eventService.getById(requestDTO.getEvent_id());
         if(event.isPresent()){
             var seating = seatingService.findById(requestDTO.getSeating_id());
@@ -41,15 +41,16 @@ public class ReservationRequestApiController {
                 if(seating.get().getEvent().getId() == event.get().getId()){
                     var reservationRequest = requestRepo.findBySeatingId(seating.get().getId());
                     if(reservationRequest !=null){
-                        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                        return new ResponseEntity<>("There is existing request", HttpStatus.BAD_REQUEST);
                     }
                     var request = toReservationRequest(seating.get(), requestDTO.getFirstName(), requestDTO.getLastName(), requestDTO.getEmail(), requestDTO.getGroupSize());
                     request = requestRepo.save(request);
-                    return new ResponseEntity<>(toRequestDTO(request, event.get().getId()), HttpStatus.CREATED);
+                    var str = toRequestDTO(request, event.get().getId()).toString();
+                    return new ResponseEntity<>(str, HttpStatus.CREATED);
                 }
             }
         }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("Event and seating does not match", HttpStatus.BAD_REQUEST);
     }
 
 }

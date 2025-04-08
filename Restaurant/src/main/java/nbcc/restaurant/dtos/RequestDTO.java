@@ -86,4 +86,15 @@ public class RequestDTO {
     public void setGroupSize(int groupSize) {
         this.groupSize = groupSize;
     }
+
+    public String toString() {
+       String request =      "id="+this.getId()
+               +", seating_id="+this.getSeating_id()
+               +", event_id="+this.getEvent_id()
+               +", firstName="+this.getFirstName()
+               +", lastName="+this.getLastName()
+               +", email="+this.getEmail()
+               +", groupSize="+this.getGroupSize();
+        return request;
+    }
 }

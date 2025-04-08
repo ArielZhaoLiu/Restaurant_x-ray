@@ -22,6 +22,7 @@ public class WebConfig implements WebMvcConfigurer {
 
         registry.addInterceptor(loginInterceptor).addPathPatterns(
                 "/event/delete/**",
+                "/event/detail/**",
                 "/event/edit/**",
                 "/event/create/**");
         registry.addInterceptor(loginInterceptor).addPathPatterns(

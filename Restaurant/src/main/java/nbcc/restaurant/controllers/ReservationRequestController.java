@@ -1,6 +1,7 @@
 package nbcc.restaurant.controllers;
 
 import jakarta.validation.Valid;
+import nbcc.restaurant.entities.DiningTable;
 import nbcc.restaurant.entities.ReservationRequest;
 import nbcc.restaurant.entities.ReservationStatus;
 import nbcc.restaurant.repositories.EventRepository;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -93,21 +95,96 @@ public class ReservationRequestController {
     }
 
     @GetMapping("/reservation/{id}")
-    public String detail(Model model, @PathVariable long id){
+    public String detail(Model model, @PathVariable long id, ReservationStatus status){
 
         var reservation = reservationRequestRepo.findById(id);
 
         if(reservation.isPresent()) { // this means the entity was found in the database
+            var currentReservation = reservation.get();
+            var seating = currentReservation.getSeating();
 
-            var seating = reservation.get().getSeating();
             var event = seating.getEvent();
+            var layout = event.getLayout();
+            var tables = layout.getDiningTables();
+
+            List<ReservationRequest> allReservationsForEvent = reservationRequestRepo.findBySeating_Event_Id(event.getId());
+
+            List<Long> usedTableIds = new ArrayList<>();
+            for (ReservationRequest r : allReservationsForEvent) {
+                if (r.getAssignedTable() != null &&
+                    r.getStatus().equals(ReservationStatus.APPROVED) &&
+                    r.getId() != currentReservation.getId()) { // excluding current reservation
+                        usedTableIds.add(r.getAssignedTable().getId());
+                }
+            }
+
+            List<DiningTable> availableTables = new ArrayList<>();
+            for (DiningTable dt : tables) {
+                if (!usedTableIds.contains(dt.getId()) ||
+                        (currentReservation.getAssignedTable() != null && dt.getId() == currentReservation.getAssignedTable().getId())
+                ) {
+                    availableTables.add(dt);
+                }
+            }
 
             model.addAttribute("seating", seating);
             model.addAttribute("event", event);
-            model.addAttribute("reservation", reservation.get());
+            model.addAttribute("layout", layout);
+            model.addAttribute("tables", availableTables);
+            model.addAttribute("reservation", currentReservation);
+            model.addAttribute("status", ReservationStatus.values());
+            model.addAttribute("selectedStatus", status);
+
+            if (reservation.get().getStatus() != null){
+                model.addAttribute("statusString", reservation.get().getStatus().toString());
+            } else {
+                model.addAttribute("statusString", "");
+            }
 
             return "/reservationRequests/detail";
         }
         return "redirect:/reservations";
     }
+
+    @PostMapping("/reservation/{id}/edit")
+    public String update(@PathVariable long id, @ModelAttribute("reservation") @Valid ReservationRequest reservation, BindingResult bindingResult, Model model){
+
+        var currentReservation = reservationRequestRepo.findById(id).orElse(null);
+        var selectedStatus = reservation.getStatus();
+
+        if (currentReservation !=null) {
+            var selectedTable = reservation.getAssignedTable();
+            if (selectedStatus == ReservationStatus.APPROVED && selectedTable == null) {
+
+                bindingResult.rejectValue("assignedTable", "error.assignedTable", "Must assign an assigned table");
+
+                model.addAttribute("reservation", currentReservation);
+                model.addAttribute("status", ReservationStatus.values());
+                model.addAttribute("selectedStatus", selectedStatus);
+
+                var seating = currentReservation.getSeating();
+                var event = seating.getEvent();
+                var layout = event.getLayout();
+                var tables = layout.getDiningTables();
+                model.addAttribute("seating", seating);
+                model.addAttribute("event", event);
+                model.addAttribute("layout", layout);
+                model.addAttribute("tables", tables);
+
+                return "/reservationRequests/detail";
+            } else if (selectedStatus == ReservationStatus.PENDING || selectedStatus == ReservationStatus.DENIED) {
+                currentReservation.setStatus(reservation.getStatus());
+                currentReservation.setAssignedTable(null);
+                reservationRequestRepo.save(currentReservation);
+            } else {
+                currentReservation.setStatus(reservation.getStatus());
+                currentReservation.setAssignedTable(reservation.getAssignedTable());
+                reservationRequestRepo.save(currentReservation);
+            }
+
+        }
+
+        return "redirect:/reservation/" + reservation.getId();
+    }
+
 }

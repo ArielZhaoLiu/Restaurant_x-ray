@@ -4,9 +4,11 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import nbcc.restaurant.entities.DiningTable;
 import nbcc.restaurant.entities.Layout;
+import nbcc.restaurant.entities.ReservationRequest;
 import nbcc.restaurant.repositories.DiningTableRepository;
 import nbcc.restaurant.repositories.EventRepository;
 import nbcc.restaurant.repositories.LayoutRepository;
+import nbcc.restaurant.repositories.ReservationRequestRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,11 +24,13 @@ public class LayoutController {
     private final LayoutRepository layoutRepo;
     private final DiningTableRepository diningTableRepo;
     private final EventRepository eventRepository;
+    private final ReservationRequestRepository reservationRequestRepo;
 
-    public LayoutController(LayoutRepository layoutRepo, DiningTableRepository diningTableRepo, EventRepository eventRepository) {
+    public LayoutController(LayoutRepository layoutRepo, DiningTableRepository diningTableRepo, EventRepository eventRepository, ReservationRequestRepository reservationRequestRepo) {
         this.layoutRepo = layoutRepo;
         this.diningTableRepo = diningTableRepo;
         this.eventRepository = eventRepository;
+        this.reservationRequestRepo = reservationRequestRepo;
     }
 
     @GetMapping("/layouts")
@@ -122,8 +126,16 @@ public class LayoutController {
 
         var table = diningTableRepo.findById(id).orElse(null);
 
-        var layoutId = table.getLayout().getId();
+        // if table is already associated with a reservationRequest
+        var reservation = reservationRequestRepo.findByAssignedTable(table);
+        if (reservation != null) {
+            table.setArchived(true);
+            diningTableRepo.save(table);
 
+            return "redirect:/layout/edit/" + table.getLayout().getId();
+        }
+
+        var layoutId = table.getLayout().getId();
         Layout layout = layoutRepo.findById(layoutId).orElse(null);
         if (layout == null) {
             return "/layouts/edit";

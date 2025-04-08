@@ -8,4 +8,5 @@ import java.util.List;
 public interface SeatingRepository extends JpaRepository<Seating, Long> {
 
     List<Seating> findByEventId(Long event_id);
+    Seating findById(long id);
 }

@@ -5,6 +5,7 @@ import nbcc.restaurant.repositories.SeatingRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class SeatingService {
@@ -21,4 +22,9 @@ public class SeatingService {
     public List<Seating> findByEventId(Long event_id) {
         return seatingRepository.findByEventId(event_id);
     }
+
+    public Optional<Seating> findById(Long id) {
+        return seatingRepository.findById(id);
+    }
+
 }

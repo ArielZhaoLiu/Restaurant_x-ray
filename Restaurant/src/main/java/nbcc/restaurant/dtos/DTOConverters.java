@@ -1,9 +1,7 @@
 package nbcc.restaurant.dtos;
 
-import nbcc.restaurant.entities.Event;
-import nbcc.restaurant.entities.Menu;
-import nbcc.restaurant.entities.MenuItem;
-import nbcc.restaurant.entities.Seating;
+import nbcc.restaurant.entities.*;
+import nbcc.restaurant.repositories.ReservationRequestRepository;
 import nbcc.restaurant.services.EventService;
 import nbcc.restaurant.services.MenuItemService;
 import nbcc.restaurant.services.MenuService;
@@ -14,17 +12,6 @@ import java.util.List;
 import java.util.Optional;
 
 public class DTOConverters {
-
-    private final SeatingService seatingService;
-    private final MenuService menuService;
-    private final MenuItemService menuItemService;
-
-    public DTOConverters(SeatingService seatingService, MenuService menuService, MenuItemService menuItemService) {
-        this.seatingService = seatingService;
-        this.menuService = menuService;
-        this.menuItemService = menuItemService;
-    }
-
 
     public static SeatingDTO toSeatingDTO(Seating seating) {
         return new SeatingDTO(
@@ -58,7 +45,6 @@ public class DTOConverters {
 
     public static List<EventDTO> toEventDTOs(Iterable<Event> events, Iterable<Seating> seatings, Iterable<Menu> menus) {
         var eventDTOS = new ArrayList<EventDTO>();
-
 
         for(var event: events){
             var seatingDTOS = new ArrayList<SeatingDTO>();
@@ -102,9 +88,8 @@ public class DTOConverters {
                 menuItemDTOS.add(toMenuItemDTO(menuItem));
             }
         }
-        var MenuWithItemDTO = new MenuWithItemDTO(menu.getId(), menu.getName(), menu.getDescription(), menuItemDTOS);
 
-        return MenuWithItemDTO;
+        return new MenuWithItemDTO(menu.getId(), menu.getName(), menu.getDescription(), menuItemDTOS);
     }
 
     public static List<MenuWithItemDTO> toMenuWithItemDTOs(Iterable<Menu> menus, Iterable<MenuItem> menuItems) {
@@ -127,4 +112,21 @@ public class DTOConverters {
         return MenuWithItemDTOs;
     }
 
+
+    public static ReservationRequest toReservationRequest(Seating seating, String firstName, String lastName, String email, int groupSize) {
+        return new ReservationRequest(seating, firstName, lastName, email, groupSize);
+    }
+
+    public static RequestDTO toRequestDTO(ReservationRequest reservationRequest, long event_id) {
+
+        return new RequestDTO(
+                reservationRequest.getId(),
+                reservationRequest.getSeating().getId(),
+                event_id,
+                reservationRequest.getFirstName(),
+                reservationRequest.getLastName(),
+                reservationRequest.getEmail(),
+                reservationRequest.getGroupSize()
+        );
+    }
 }

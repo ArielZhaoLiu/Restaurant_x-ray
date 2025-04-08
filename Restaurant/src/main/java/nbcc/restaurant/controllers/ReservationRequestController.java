@@ -33,13 +33,13 @@ public class ReservationRequestController {
     public String reserve(@PathVariable long id, Model model){
 
         var seatingDb= seatingRepo.findById(id);
-        var eventDb= eventRepo.findById(seatingDb.get().getEvent().getId());
+        var eventDb= eventRepo.findById(seatingDb.getEvent().getId());
 
         var reservation = new ReservationRequest();
-        reservation.setSeating(seatingDb.get());
+        reservation.setSeating(seatingDb);
         model.addAttribute("reservation", reservation);
         model.addAttribute("event", eventDb.get());
-        model.addAttribute("seating", seatingDb.get());
+        model.addAttribute("seating", seatingDb);
 
         return "/reservationRequests/create";
     }
@@ -49,7 +49,7 @@ public class ReservationRequestController {
                                      BindingResult bindingResult,
                                      @PathVariable long seating_id, Model model){
 
-        var seating = seatingRepo.findById(seating_id).orElse(null);
+        var seating = seatingRepo.findById(seating_id);
         var eventDb= seating.getEvent();
 
         reservationRequest.setSeating(seating);

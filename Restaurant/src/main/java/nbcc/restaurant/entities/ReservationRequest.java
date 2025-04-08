@@ -42,6 +42,15 @@ public class ReservationRequest {
         this.groupSize = groupSize;
     }
 
+    public ReservationRequest(Seating seating, String firstName, String lastName, String email, int groupSize) {
+        this.seating = seating;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.groupSize = groupSize;
+    }
+
+
     public long getId() {
         return id;
     }

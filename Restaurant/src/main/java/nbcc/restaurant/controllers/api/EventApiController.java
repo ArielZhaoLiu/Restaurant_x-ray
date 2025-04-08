@@ -26,9 +26,6 @@ import java.util.Optional;
 import static nbcc.restaurant.dtos.DTOConverters.toEventDTO;
 import static nbcc.restaurant.dtos.DTOConverters.toEventDTOs;
 
-/*import static nbcc.restaurant.dtos.DTOConverters.toEventDTO;
-import static nbcc.restaurant.dtos.DTOConverters.toEventDTOs;*/
-
 
 @RestController
 @RequestMapping("/api/event")

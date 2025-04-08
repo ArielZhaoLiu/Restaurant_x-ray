@@ -13,5 +13,7 @@ public interface ReservationRequestRepository extends JpaRepository<ReservationR
     List<ReservationRequest> findByStatusOrderBySeating_SeatingDateTimeAsc(ReservationStatus status);
     List<ReservationRequest> findBySeating_Event_IdAndStatusOrderBySeating_SeatingDateTimeAsc(long seatingEventId, ReservationStatus status);
     List<ReservationRequest> findAllByOrderBySeating_SeatingDateTimeAsc();
+    ReservationRequest findByAssignedTable(DiningTable table);
+    List<ReservationRequest> findBySeating_Event_Id(Long eventId);
     ReservationRequest findBySeatingId(long seatingId);
 }

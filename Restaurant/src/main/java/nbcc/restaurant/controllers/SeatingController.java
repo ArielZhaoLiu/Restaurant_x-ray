@@ -5,6 +5,7 @@ import nbcc.restaurant.entities.Event;
 import nbcc.restaurant.entities.ReservationRequest;
 import nbcc.restaurant.entities.Seating;
 import nbcc.restaurant.repositories.EventRepository;
+import nbcc.restaurant.repositories.ReservationRequestRepository;
 import nbcc.restaurant.repositories.SeatingRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,10 +19,12 @@ public class SeatingController {
 
     private final SeatingRepository seatingRepo;
     private final EventRepository eventRepo;
+    private final ReservationRequestRepository requestRepo;
 
-    public SeatingController(SeatingRepository seatingRepo, EventRepository eventRepo) {
+    public SeatingController(SeatingRepository seatingRepo, EventRepository eventRepo, ReservationRequestRepository requestRepo) {
         this.seatingRepo = seatingRepo;
         this.eventRepo = eventRepo;
+        this.requestRepo = requestRepo;
     }
 
     @GetMapping({ "/seating/create/{id}"})
@@ -34,7 +37,7 @@ public class SeatingController {
             return "/seatings/create";
         }
 
-        return "redirect:/events/"+id;
+        return "redirect:/event/detail/"+id;
     }
 
     @PostMapping({ "/seating/create/{event_id}"})
@@ -70,55 +73,64 @@ public class SeatingController {
             }
 
        }
-        return "redirect:/event/" + event_id;
+        return "redirect:/event/detail/" + event_id;
 
     }
 
     @GetMapping({ "/seating/delete/{id}"})
     public String delete(Model model, @PathVariable long id){
         var seating= seatingRepo.findById(id);
+        var request= requestRepo.findBySeatingId(id);
+        boolean empty;
 
-        if(seating.isPresent()){
-            var eventDb= eventRepo.findById(seating.get().getEvent().getId());
+        if(seating != null){
+            var eventDb= eventRepo.findById(seating.getEvent().getId());
+
             if(eventDb.isPresent()) {
             model.addAttribute("event", eventDb.get());
-
-            model.addAttribute("seating", seating.get());
+            model.addAttribute("seating", seating);
             }
-            return "/seatings/delete";
 
+            if (request == null)
+                empty = true;
+            else
+                empty = false;
+
+            model.addAttribute("requestEmpty", empty);
+            return "/seatings/delete";
         }
-        return "redirect:/event/" + seating.get().getEvent().getId();
+        return "redirect:/event/detail/" + seating.getEvent().getId();
     }
 
     @PostMapping({ "/seating/delete/{id}"})
     public String delete( @PathVariable long id){
         var seating= seatingRepo.findById(id);
+
         seatingRepo.deleteById(id);
 
-        return "redirect:/event/" + seating.get().getEvent().getId();
+        return "redirect:/event/detail/" + seating.getEvent().getId();
     }
 
 
     @GetMapping({ "/seating/edit/{id}"})
     public String edit(Model model, @PathVariable long id){
         var seating= seatingRepo.findById(id);
-        var eventDb= eventRepo.findById(seating.get().getEvent().getId());
+        var eventDb= eventRepo.findById(seating.getEvent().getId());
 
-        if(seating.isPresent()){
+        if(seating != null && eventDb.isPresent()) {
             model.addAttribute("event", eventDb.get());
-            model.addAttribute("seating", seating.get());
+            model.addAttribute("seating", seating);
             return "/seatings/edit";
         }
-        return "redirect:/event/" + seating.get().getEvent().getId();
+        return "redirect:/event/detail/" + seating.getEvent().getId();
     }
 
     @PostMapping({ "/seating/edit/{id}"})
     public String edit(@PathVariable long id, @Valid Seating seating, BindingResult bindingResult, Model model){
         var seatingDb= seatingRepo.findById(seating.getId());
 
-        if(seatingDb.isPresent()){
-            var eventDb= eventRepo.findById(seatingDb.get().getEvent().getId());
+        if(seatingDb != null){
+            var eventDb= eventRepo.findById(seatingDb.getEvent().getId());
             model.addAttribute("event", eventDb.get());
             if(bindingResult.hasErrors()){
                 return "/seatings/edit";
@@ -137,17 +149,16 @@ public class SeatingController {
                 return "seatings/create";
             }
 
-            seatingDb.get().setSeatingDateTime(seating.getSeatingDateTime());
-            seatingDb.get().setSeatingDuration(seating.getSeatingDuration());
-            try{seatingRepo.save(seatingDb.get());} catch (Exception e) {
+            seatingDb.setSeatingDateTime(seating.getSeatingDateTime());
+            seatingDb.setSeatingDuration(seating.getSeatingDuration());
+            try{seatingRepo.save(seatingDb);} catch (Exception e) {
                 System.out.println(e.getMessage());
             }
 
-            return "redirect:/event/" + eventDb.get().getId();
+            return "redirect:/event/detail" + eventDb.get().getId();
         }
 
-
-        return "redirect:/event/" + eventRepo.findById(seatingDb.get().getEvent().getId());
+        return "redirect:/event/detail/" + eventRepo.findById(seatingDb.getEvent().getId());
     }
 
 }

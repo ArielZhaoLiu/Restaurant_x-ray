@@ -5,10 +5,7 @@ import nbcc.restaurant.entities.Event;
 import nbcc.restaurant.entities.Menu;
 import nbcc.restaurant.entities.Layout;
 import nbcc.restaurant.entities.Seating;
-import nbcc.restaurant.repositories.EventRepository;
-import nbcc.restaurant.repositories.MenuRepository;
-import nbcc.restaurant.repositories.LayoutRepository;
-import nbcc.restaurant.repositories.SeatingRepository;
+import nbcc.restaurant.repositories.*;
 import nbcc.restaurant.services.MenuService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,12 +22,14 @@ public class EventController {
     private final SeatingRepository seatingRepo;
     private final MenuService menuService;
     private final LayoutRepository layoutRepo;
+    private final ReservationRequestRepository requestRepo;
 
-    public EventController(EventRepository eventRepo, SeatingRepository seatingRepository, MenuService menuService, LayoutRepository layoutRepo) {
+    public EventController(EventRepository eventRepo, SeatingRepository seatingRepository, MenuService menuService, LayoutRepository layoutRepo, ReservationRequestRepository requestRepo) {
         this.eventRepo = eventRepo;
         this.seatingRepo = seatingRepository;
         this.menuService = menuService;
         this.layoutRepo = layoutRepo;
+        this.requestRepo = requestRepo;
     }
 
     @ModelAttribute("menus")
@@ -131,12 +130,28 @@ public class EventController {
     @GetMapping({ "/event/delete/{id}"})
     public String delete(Model model, @PathVariable long id){
         var entity= eventRepo.findById(id);
+        var seatings = seatingRepo.findByEventId(id);
+
+        boolean empty=true;
 
         if(entity.isPresent()){
+            for(Seating seating: seatings){
+                var request = requestRepo.findBySeatingId(seating.getId());
+                if(request == null) {
+                    empty = true;
+                }
+                else {
+                    empty = false;
+                    break;
+                }
+            }
+
+            model.addAttribute("requestEmpty", empty);
             model.addAttribute("event", entity.get());
             model.addAttribute("dateNow", LocalDate.now());
             return "/events/delete";
         }
+
 
         return "redirect:/events";
     }

@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
+
 import static nbcc.restaurant.dtos.DTOConverters.*;
 
 @RestController
@@ -43,14 +45,20 @@ public class ReservationRequestApiController {
                     if(reservationRequest !=null){
                         return new ResponseEntity<>("There is existing request", HttpStatus.BAD_REQUEST);
                     }
-                    var request = toReservationRequest(seating.get(), requestDTO.getFirstName(), requestDTO.getLastName(), requestDTO.getEmail(), requestDTO.getGroupSize());
-                    request = requestRepo.save(request);
-                    var str = toRequestDTO(request, event.get().getId()).toString();
-                    return new ResponseEntity<>(str, HttpStatus.CREATED);
+                    if(event.get().getEndDate().isAfter(LocalDate.now())){
+                        var request = toReservationRequest(seating.get(), requestDTO.getFirstName(), requestDTO.getLastName(), requestDTO.getEmail(), requestDTO.getGroupSize());
+                        request = requestRepo.save(request);
+                        var str = toRequestDTO(request, event.get().getId()).toString();
+                        return new ResponseEntity<>(str, HttpStatus.CREATED);
+                    }
+                    else{
+                        return new ResponseEntity<>("Cannot request for past event", HttpStatus.BAD_REQUEST);
+                    }
+
                 }
             }
         }
-        return new ResponseEntity<>("Event and seating does not match", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("Event or seating does not match or invalid", HttpStatus.BAD_REQUEST);
     }
 
 }

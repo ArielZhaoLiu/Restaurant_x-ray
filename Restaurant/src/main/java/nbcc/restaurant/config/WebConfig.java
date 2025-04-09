@@ -36,7 +36,7 @@ public class WebConfig implements WebMvcConfigurer {
                 "/menu/edit/**",
                 "/menu/create/**");
         registry.addInterceptor(loginInterceptor).addPathPatterns(
-                "/menuItem");
+                "/menuItem/**");
         registry.addInterceptor(loginInterceptor).addPathPatterns(
                 "/reservations**",
                 "/reservation/**");

@@ -35,7 +35,9 @@
                   | <a th:href="@{/event/edit/{id}(id=${event.id})}">Edit</a>
                     | <a th:href="@{/event/delete/{id}(id=${event.id})}">Delete</a>
 
-                    |   </span><a th:href="@{/event/reserve/{id}(id=${event.id})}">Reserve</a>
+                    |   </span>
+                    <a th:if="${event.endDate.isAfter(dateNow) or event.endDate.isEqual(dateNow)}" th:href="@{/event/reserve/{id}(id=${event.id})}">Reserve</a>
+                    <span th:if="${event.endDate.isBefore(dateNow)}">Past Event</span>
                 </td>
 
             </tr>

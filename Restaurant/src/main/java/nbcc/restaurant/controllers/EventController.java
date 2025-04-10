@@ -232,7 +232,7 @@ public class EventController {
 
             events = eventRepo.findByStartDateGreaterThanEqualAndEndDateLessThanEqual(s, e);
         }
-
+        model.addAttribute("dateNow", LocalDate.now());
         model.addAttribute("events", events);
         model.addAttribute("startDate", startDate);
         model.addAttribute("endDate", endDate);

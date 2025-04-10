@@ -94,17 +94,19 @@ public class MenuItemController {
 
     @PostMapping({ "/menuItem/edit/{id}"})
     public String edit(@PathVariable long id, @Valid MenuItem menuItem, BindingResult bindingResult, Model model){
-        var menuItemDb= menuItemRepo.findById(menuItem.getId());
+        var menuItemDb= menuItemRepo.findById(menuItem.getId()).get();
 
-        if(menuItemDb.isPresent()){
-            var menuDb= menuRepo.findById(menuItemDb.get().getMenu().getId());
+        if(menuItemDb !=null ){
+            var menuDb= menuRepo.findById(menuItemDb.getMenu().getId());
 
 
             if(bindingResult.hasErrors()){
                 return "/menuItems/edit";
             }
-
-            try{menuItemRepo.save(menuItem);} catch (Exception e) {
+            menuItemDb.setName(menuItem.getName());
+            menuItemDb.setDescription(menuItem.getDescription());
+            menuItemDb.setMenu( menuItem.getMenu() );
+            try{menuItemRepo.save(menuItemDb);} catch (Exception e) {
                 System.out.println(e.getMessage());
             }
 
@@ -112,7 +114,7 @@ public class MenuItemController {
         }
 
 
-        return "redirect:/menu/" + menuRepo.findById(menuItemDb.get().getMenu().getId());
+        return "redirect:/menu/" + menuRepo.findById(menuItemDb.getMenu().getId());
 
     }
 

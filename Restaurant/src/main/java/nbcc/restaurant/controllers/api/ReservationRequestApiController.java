@@ -35,7 +35,7 @@ public class ReservationRequestApiController {
     }
 
     @PostMapping
-    public ResponseEntity<String> create(@RequestBody @Valid RequestDTO requestDTO) throws Exception {
+    public ResponseEntity<?> create(@RequestBody @Valid RequestDTO requestDTO) throws Exception {
         var event = eventService.getById(requestDTO.getEvent_id());
         if(event.isPresent()){
             var seating = seatingService.findById(requestDTO.getSeating_id());
@@ -48,8 +48,7 @@ public class ReservationRequestApiController {
                     if(event.get().getEndDate().isAfter(LocalDate.now())){
                         var request = toReservationRequest(seating.get(), requestDTO.getFirstName(), requestDTO.getLastName(), requestDTO.getEmail(), requestDTO.getGroupSize());
                         request = requestRepo.save(request);
-                        var str = toRequestDTO(request, event.get().getId()).toString();
-                        return new ResponseEntity<>(str, HttpStatus.CREATED);
+                        return new ResponseEntity<>(toRequestDTO(request, event.get().getId()), HttpStatus.CREATED);
                     }
                     else{
                         return new ResponseEntity<>("Cannot request for past event", HttpStatus.BAD_REQUEST);

@@ -193,7 +193,7 @@ public class EventController {
 
     @PostMapping({ "/event/edit"})
     public String edit(@Valid Event event, BindingResult bindingResult, Model model){
-
+        var eventDb = eventRepo.findById(event.getId()).get();
         if(bindingResult.hasErrors()){
             return "/events/edit";
         }
@@ -202,8 +202,18 @@ public class EventController {
             bindingResult.rejectValue("startDate", "error.startDate", "Start date cannot be after end date");
             return "/events/edit";
         }
+        eventDb.setName(event.getName());
+        eventDb.setDescription(event.getDescription());
+        eventDb.setStartDate(event.getStartDate());
+        eventDb.setEndDate(event.getEndDate());
+        eventDb.setPrice(event.getPrice());
+        eventDb.setSeatings(event.getSeatings());
+        eventDb.setLayout(event.getLayout());
+        eventDb.setMenu(event.getMenu());
+        try{eventRepo.save(eventDb);} catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
 
-        eventRepo.save(event);
         return "redirect:/events";
 
     }

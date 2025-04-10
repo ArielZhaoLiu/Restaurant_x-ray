@@ -155,7 +155,7 @@ public class SeatingController {
                 System.out.println(e.getMessage());
             }
 
-            return "redirect:/event/detail" + eventDb.get().getId();
+            return "redirect:/event/detail/" + eventDb.get().getId();
         }
 
         return "redirect:/event/detail/" + eventRepo.findById(seatingDb.getEvent().getId());

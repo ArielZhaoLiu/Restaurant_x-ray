@@ -54,6 +54,9 @@ public class MenuApiController {
     @GetMapping("/event/{id}")
     public ResponseEntity<MenuWithItemDTO> getByEvent(@PathVariable long id) {
         var event = eventService.getById(id);
+        if(event.isEmpty()) {
+            return new  ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
         var menu = menuService.getById(event.get().getMenu().getId());
         if (menu.isEmpty()) {
             return new  ResponseEntity<>(HttpStatus.NO_CONTENT);

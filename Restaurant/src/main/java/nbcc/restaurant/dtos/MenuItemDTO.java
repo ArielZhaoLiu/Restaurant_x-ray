@@ -14,7 +14,6 @@ public class MenuItemDTO {
     private long id;
     private String name;
     private String description;
-    private long menu_id;
 
     public MenuItemDTO() {
     }
@@ -23,7 +22,6 @@ public class MenuItemDTO {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.menu_id = menu_id;
     }
 
     public long getId() {
@@ -50,11 +48,4 @@ public class MenuItemDTO {
         this.description = description;
     }
 
-    public long getMenu_id() {
-        return menu_id;
-    }
-
-    public void setMenu_id(long menu_id) {
-        this.menu_id = menu_id;
-    }
 }

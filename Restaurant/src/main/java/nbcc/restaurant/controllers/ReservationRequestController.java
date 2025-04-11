@@ -218,19 +218,75 @@ public class ReservationRequestController {
                 model.addAttribute("tables", tables);
 
                 return "/reservationRequests/detail";
-            } else if (selectedStatus == ReservationStatus.PENDING || selectedStatus == ReservationStatus.DENIED) {
+            } else if (selectedStatus == ReservationStatus.PENDING) {
                 currentReservation.setStatus(reservation.getStatus());
                 currentReservation.setAssignedTable(null);
                 reservationRequestRepo.save(currentReservation);
+            } else if (selectedStatus == ReservationStatus.DENIED) {
+                currentReservation.setStatus(reservation.getStatus());
+                currentReservation.setAssignedTable(null);
+                reservationRequestRepo.save(currentReservation);
+                sendDeniedEmail(currentReservation);
             } else {
                 currentReservation.setStatus(reservation.getStatus());
                 currentReservation.setAssignedTable(reservation.getAssignedTable());
                 reservationRequestRepo.save(currentReservation);
+                sendApprovedEmail(currentReservation);
+
             }
-
         }
-
         return "redirect:/reservation/" + reservation.getId();
+    }
+
+    private void sendApprovedEmail(ReservationRequest reservationRequest) {
+        try{
+            if (reservationRequest.getEmail() != null && !reservationRequest.getEmail().isBlank()) {
+                var subject = "Your Reservation Request Has Been Approved!";
+                var text = "Hi " + reservationRequest.getFirstName() + " " + reservationRequest.getLastName() + ",\n\n" +
+                        "Great news! Your reservation request for the " + reservationRequest.getSeating().getEvent().getName() + " has been approved.\n" +
+                        "We look forward to welcoming you.\n" +
+                        "Here are your confirmed booking details:\n\n" +
+                        "Reservation ID: " + reservationRequest.getId() + "\n\n" +
+                        "Event: " + reservationRequest.getSeating().getEvent().getName() + "\n" +
+                        "Description: " + reservationRequest.getSeating().getEvent().getDescription() + "\n" +
+                        "Layout: " + reservationRequest.getSeating().getEvent().getLayout().getName() + "\n" +
+                        "Price: $" + reservationRequest.getSeating().getEvent().getPrice()+ "\n" +
+                        "Full Name: " + reservationRequest.getFirstName() + " " + reservationRequest.getLastName() + "\n" +
+                        "Email Address: " + reservationRequest.getEmail() + "\n" +
+                        "Group Size: " + reservationRequest.getGroupSize() + "\n" +
+                        "Reservation Date and Time: " + reservationRequest.getSeating().getSeatingDateTime() + "\n" +
+                        "Duration: " + reservationRequest.getSeating().getSeatingDuration() + " minutes\n\n" +
+                        "If you have any questions or need to make changes to your request, feel free to contact us at admin@xrayteam.ca\n\n" +
+                        "Warm regards,\n" +
+                        "X-Team Booking";
+
+                emailSenderService.sendEmail(subject, text, emailSenderConfig.getDefaultFrom(), reservationRequest.getEmail());
+            } else {
+                log.warn("Email not provided for user {}", reservationRequest.getEmail());
+            }
+        } catch (Exception e){
+            log.error("Error while sending reservation email", e);
+        }
+    }
+    private void sendDeniedEmail(ReservationRequest reservationRequest) {
+        try{
+            if (reservationRequest.getEmail() != null && !reservationRequest.getEmail().isBlank()) {
+                var subject = "Your Reservation Request Has Been Denied.";
+                var text = "Dear " + reservationRequest.getFirstName() + " " + reservationRequest.getLastName() + ",\n\n" +
+                        "Thank you for your interest in the " + reservationRequest.getSeating().getEvent().getName() + " event.\n" +
+                        "We regret to inform you that your reservation request has been denied.\n" +
+                        "This could be due to limited availability or other scheduling conflicts.\n" +
+                        "We sincerely apologize for the inconvenience and encourage you to explore our other upcoming events.\n" +
+                        "If you have any questions, feel free to reach out to us at admin@xrayteam.ca\n\n" +
+                        "Warm regards,\n" +
+                        "X-Team Booking";
+                emailSenderService.sendEmail(subject, text, emailSenderConfig.getDefaultFrom(), reservationRequest.getEmail());
+            } else {
+                log.warn("Email not provided for user {}", reservationRequest.getEmail());
+            }
+        } catch (Exception e){
+            log.error("Error while sending reservation email", e);
+        }
     }
 
 }

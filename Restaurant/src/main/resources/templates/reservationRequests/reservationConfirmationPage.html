@@ -8,7 +8,15 @@
 <header><div th:insert="~{nav :: navbar}"></div></header>
 <div class="container">
   <main role="main" class="pb-3">
-      <div>You reservation request was sent, waiting for approved.</div>
+      <div>
+          <p>Thank you for your reservation request!</p>
+
+          <p>Your request has been successfully submitted and is now pending confirmation.<br>
+              A confirmation email has been sent to <strong>ariel@liu.com</strong>.<br>
+              Please check your inbox (and spam folder, just in case).</p>
+
+          <p>We will notify you by email once your booking is approved or denied.</p>
+      </div>
 <!--      <div><a th:href="@{/event/{id}(id=${event.id})}">Back to Home Page</a></div>-->
   </main>
 </div>

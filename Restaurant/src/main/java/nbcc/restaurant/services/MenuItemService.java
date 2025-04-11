@@ -1,9 +1,7 @@
 package nbcc.restaurant.services;
 
 import nbcc.restaurant.entities.MenuItem;
-import nbcc.restaurant.entities.Seating;
 import nbcc.restaurant.repositories.MenuItemRepository;
-import nbcc.restaurant.repositories.SeatingRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

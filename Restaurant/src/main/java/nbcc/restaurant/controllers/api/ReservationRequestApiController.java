@@ -2,8 +2,6 @@ package nbcc.restaurant.controllers.api;
 
 import jakarta.validation.Valid;
 import nbcc.restaurant.dtos.RequestDTO;
-import nbcc.restaurant.entities.ReservationRequest;
-import nbcc.restaurant.entities.ReservationStatus;
 import nbcc.restaurant.repositories.ReservationRequestRepository;
 import nbcc.restaurant.services.EventService;
 import nbcc.restaurant.services.SeatingService;
@@ -15,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
-
 import static nbcc.restaurant.dtos.DTOConverters.*;
 
 @RestController

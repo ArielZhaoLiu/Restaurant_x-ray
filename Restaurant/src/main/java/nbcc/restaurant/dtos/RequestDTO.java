@@ -1,12 +1,5 @@
 package nbcc.restaurant.dtos;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import nbcc.restaurant.entities.ReservationStatus;
-import nbcc.restaurant.entities.Seating;
-
 public class RequestDTO {
 
 

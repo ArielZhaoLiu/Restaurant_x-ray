@@ -1,12 +1,8 @@
 package nbcc.restaurant.controllers.api;
 
-import nbcc.restaurant.dtos.EventDTO;
 import nbcc.restaurant.dtos.MenuWithItemDTO;
-import nbcc.restaurant.entities.MenuItem;
-import nbcc.restaurant.services.EventService;
 import nbcc.restaurant.services.MenuItemService;
 import nbcc.restaurant.services.MenuService;
-import nbcc.restaurant.services.SeatingService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-
 import static nbcc.restaurant.dtos.DTOConverters.*;
 
 @RestController

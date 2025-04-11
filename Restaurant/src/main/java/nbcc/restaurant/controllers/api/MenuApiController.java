@@ -23,10 +23,12 @@ import static nbcc.restaurant.dtos.DTOConverters.*;
 public class MenuApiController {
 
     private final MenuService menuService;
+    private final EventService eventService;
     private final MenuItemService menuItemService;
 
-    public MenuApiController(MenuService menuService, MenuItemService menuItemService) {
+    public MenuApiController(MenuService menuService, EventService eventService, MenuItemService menuItemService) {
         this.menuService = menuService;
+        this.eventService = eventService;
         this.menuItemService = menuItemService;
     }
 
@@ -38,6 +40,21 @@ public class MenuApiController {
     @GetMapping("/{id}")
     public ResponseEntity<MenuWithItemDTO> get(@PathVariable long id) {
         var menu = menuService.getById(id);
+        if (menu.isEmpty()) {
+            return new  ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        var menuItems = menuItemService.findByMenuId(menu.get().getId());
+
+
+        return new  ResponseEntity<>(toMenuWithItemDTO(menu.get(),menuItems), HttpStatus.OK);
+
+    }
+
+    @GetMapping("/event/{id}")
+    public ResponseEntity<MenuWithItemDTO> getByEvent(@PathVariable long id) {
+        var event = eventService.getById(id);
+        var menu = menuService.getById(event.get().getMenu().getId());
         if (menu.isEmpty()) {
             return new  ResponseEntity<>(HttpStatus.NO_CONTENT);
         }

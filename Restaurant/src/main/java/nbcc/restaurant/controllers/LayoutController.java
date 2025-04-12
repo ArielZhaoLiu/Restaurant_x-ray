@@ -4,6 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import nbcc.restaurant.entities.DiningTable;
 import nbcc.restaurant.entities.Layout;
+import nbcc.restaurant.entities.ReservationRequest;
 import nbcc.restaurant.repositories.DiningTableRepository;
 import nbcc.restaurant.repositories.EventRepository;
 import nbcc.restaurant.repositories.LayoutRepository;
@@ -14,6 +15,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import java.time.LocalDateTime;
 
 @Controller
 public class LayoutController {

@@ -1,5 +1,16 @@
 package nbcc.restaurant.dtos;
 
+import jakarta.persistence.FetchType;
+import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import nbcc.restaurant.entities.Event;
+import nbcc.restaurant.entities.MenuItem;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
 public class MenuDTO {
 
     private long id;

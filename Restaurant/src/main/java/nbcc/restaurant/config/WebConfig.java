@@ -24,14 +24,12 @@ public class WebConfig implements WebMvcConfigurer {
                 "/event/delete/**",
                 "/event/detail/**",
                 "/event/edit/**",
-                "/event/create/**",
-                "/event/**/reservations");
+                "/event/create/**");
         registry.addInterceptor(loginInterceptor).addPathPatterns(
                 "/seating/edit/**",
                 "/seating/delete/**",
                 "/seating/create/**");
         registry.addInterceptor(loginInterceptor).addPathPatterns(
-                "/layouts/**",
                 "/layout/**");
         registry.addInterceptor(loginInterceptor).addPathPatterns(
                 "/menu/delete/**",

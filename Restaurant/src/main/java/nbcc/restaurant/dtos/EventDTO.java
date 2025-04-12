@@ -1,5 +1,9 @@
 package nbcc.restaurant.dtos;
 
+
+import nbcc.restaurant.entities.Menu;
+import nbcc.restaurant.entities.Seating;
+
 import java.time.LocalDate;
 import java.util.List;
 

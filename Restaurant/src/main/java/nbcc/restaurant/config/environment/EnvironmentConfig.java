@@ -1,11 +1,10 @@
 package nbcc.restaurant.config.environment;
 
-import nbcc.restaurant.config.EmailSenderConfig;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 @Component
-public class EnvironmentConfig implements DefaultAdminConfig, EmailSenderConfig{
+public class EnvironmentConfig implements DefaultAdminConfig{
 
     private final Environment environment;
 
@@ -26,10 +25,5 @@ public class EnvironmentConfig implements DefaultAdminConfig, EmailSenderConfig{
     @Override
     public String getDefaultAdminEmail() {
         return environment.getProperty("Default.Admin.Email");
-    }
-
-    @Override
-    public String getDefaultFrom() {
-        return environment.getProperty("Default.From.Email");
     }
 }

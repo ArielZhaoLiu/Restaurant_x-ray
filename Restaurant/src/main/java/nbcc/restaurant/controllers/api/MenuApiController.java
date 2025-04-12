@@ -1,8 +1,12 @@
 package nbcc.restaurant.controllers.api;
 
+import nbcc.restaurant.dtos.EventDTO;
 import nbcc.restaurant.dtos.MenuWithItemDTO;
+import nbcc.restaurant.entities.MenuItem;
+import nbcc.restaurant.services.EventService;
 import nbcc.restaurant.services.MenuItemService;
 import nbcc.restaurant.services.MenuService;
+import nbcc.restaurant.services.SeatingService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+
 import static nbcc.restaurant.dtos.DTOConverters.*;
 
 @RestController
@@ -18,10 +23,12 @@ import static nbcc.restaurant.dtos.DTOConverters.*;
 public class MenuApiController {
 
     private final MenuService menuService;
+    private final EventService eventService;
     private final MenuItemService menuItemService;
 
-    public MenuApiController(MenuService menuService, MenuItemService menuItemService) {
+    public MenuApiController(MenuService menuService, EventService eventService, MenuItemService menuItemService) {
         this.menuService = menuService;
+        this.eventService = eventService;
         this.menuItemService = menuItemService;
     }
 
@@ -33,6 +40,24 @@ public class MenuApiController {
     @GetMapping("/{id}")
     public ResponseEntity<MenuWithItemDTO> get(@PathVariable long id) {
         var menu = menuService.getById(id);
+        if (menu.isEmpty()) {
+            return new  ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        var menuItems = menuItemService.findByMenuId(menu.get().getId());
+
+
+        return new  ResponseEntity<>(toMenuWithItemDTO(menu.get(),menuItems), HttpStatus.OK);
+
+    }
+
+    @GetMapping("/event/{id}")
+    public ResponseEntity<MenuWithItemDTO> getByEvent(@PathVariable long id) {
+        var event = eventService.getById(id);
+        if(event.isEmpty()) {
+            return new  ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        var menu = menuService.getById(event.get().getMenu().getId());
         if (menu.isEmpty()) {
             return new  ResponseEntity<>(HttpStatus.NO_CONTENT);
         }

@@ -9,39 +9,60 @@
 <div class="container">
     <main role="main" class="pb-3">
         <h1>EVENTS</h1>
-        <a th:if="${session.loggedIn}" th:href="@{/event/create}" class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">Add Event
+        <a th:if="${session.loggedIn}" th:href="@{/event/create}" class="link-offset-2 link-underline link-underline-opacity-0">Add Event
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
                 <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z"/>
             </svg>
         </a>
 
-        <table class="table" th:unless="${events ==null}">
+        <table class="table table-hover" th:unless="${events ==null}">
             <thead>
             <tr>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Start Date</th>
-                <th>End Date</th>
-                <th>Price</th>
-                <th>Manage</th>
+                <th>NAME</th>
+<!--                <th>Description</th>-->
+                <th>START DATE</th>
+                <th>END DATE</th>
+                <th>PRICE</th>
+                <th>ACTION</th>
             </tr>
             </thead>
             <tbody class="table-group-divider">
             <tr th:if="${event.isArchived() == false}" th:each="event :${events}">
-
-                <td><span th:text="${event.name}"></span></td>
-                <td><span th:text="${event.description}"></span></td>
+                <td>
+                    <a th:if="${session.loggedIn}" th:href="@{/event/detail/{id}(id=${event.id})}" class="link-primary link-offset-1 link-underline-opacity-0 link-underline-opacity-100-hover">
+                        <div th:text="${event.name}"></div>
+                    </a>
+                    <div th:unless="${session.loggedIn}" th:text="${event.name}"></div>
+                    <span th:unless="${#strings.isEmpty(event.description)}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-left-dots fs-6 text-body-tertiary fw-light" viewBox="0 0 16 16">
+                            <path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4.414A2 2 0 0 0 3 11.586l-2 2V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/>
+                            <path d="M5 6a1 1 0 1 1-2 0 1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
+                        </svg>&nbsp;
+                    </span>
+                    <small th:text="${event.description}" class="fw-light text-body-tertiary">
+                    </small>
+                </td>
+<!--                <td><span th:text="${event.description}"></span></td>-->
                 <td><span th:text="${event.startDate}"></span></td>
                 <td><span th:text="${event.endDate}"></span></td>
                 <td><span th:text="${event.price}"></span></td>
                 <td>
-                    <span th:if="${session.loggedIn}">
-                        <a th:href="@{/event/detail/{id}(id=${event.id})}">Detail</a> |
-                        <a th:href="@{/event/edit/{id}(id=${event.id})}">Edit</a> |
-                        <a th:href="@{/event/delete/{id}(id=${event.id})}">Delete</a>
-                    </span>&nbsp;
                     <a th:if="${event.endDate.isAfter(dateNow) or event.endDate.isEqual(dateNow)}" th:href="@{/event/reserve/{id}(id=${event.id})}" class="btn btn-success">Reserve</a>
                     <span th:if="${event.endDate.isBefore(dateNow)}">Past Event</span>
+                    <span th:if="${session.loggedIn}">
+                        &nbsp;
+                        <a th:href="@{/event/edit/{id}(id=${event.id})}" class="link-warning">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                              <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                              <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
+                            </svg>
+                        </a>&nbsp;
+                        <a th:href="@{/event/delete/{id}(id=${event.id})}" class="link-danger">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
+                              <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"/>
+                            </svg>
+                        </a>
+                    </span>
                 </td>
 
             </tr>

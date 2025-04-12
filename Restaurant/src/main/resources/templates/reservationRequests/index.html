@@ -46,7 +46,7 @@
         <th></th>
       </tr>
       </thead>
-      <tbody>
+      <tbody class="table-group-divider">
       <tr th:each="reservation : ${reservations}">
         <td><span th:text="*{reservation.seating.getEvent().name}"></span></td>
         <td><span th:text="*{reservation.seating.seatingDateTime}"></span></td>
@@ -54,7 +54,12 @@
         <td><span th:text="*{reservation.firstName}"></span> <span th:text="*{reservation.lastName}"></span></td>
         <td><span th:text="*{reservation.groupSize}"></span></td>
         <td><span th:text="*{reservation.seating.getEvent().price}"></span></td>
-        <td><span th:text="*{reservation.status}"></span></td>
+        <td>
+          <span th:if="*{reservation.status !=null && reservation.status.name() == 'APPROVED'}" th:text="*{reservation.status}" class="badge rounded-pill text-bg-success"></span>
+          <span th:if="*{reservation.status !=null && reservation.status.name() == 'DENIED'}" th:text="*{reservation.status}" class="badge rounded-pill text-bg-secondary"></span>
+          <span th:if="*{reservation.status !=null && reservation.status.name() == 'PENDING'}" th:text="*{reservation.status}" class="badge rounded-pill text-bg-warning"></span>
+
+        </td>
         <td>
           <a th:href="@{/reservation/{id}(id=${reservation.id})}">Select</a>
         </td>

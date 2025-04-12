@@ -9,7 +9,12 @@
 <div class="container">
     <main role="main" class="pb-3">
         <h1>EVENTS</h1>
-        <a th:if="${session.loggedIn}" th:href="@{/event/create}">Add Event</a>
+        <a th:if="${session.loggedIn}" th:href="@{/event/create}" class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">Add Event
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z"/>
+            </svg>
+        </a>
+
         <table class="table" th:unless="${events ==null}">
             <thead>
             <tr>
@@ -21,7 +26,7 @@
                 <th>Manage</th>
             </tr>
             </thead>
-            <tbody>
+            <tbody class="table-group-divider">
             <tr th:if="${event.isArchived() == false}" th:each="event :${events}">
 
                 <td><span th:text="${event.name}"></span></td>
@@ -31,12 +36,11 @@
                 <td><span th:text="${event.price}"></span></td>
                 <td>
                     <span th:if="${session.loggedIn}">
-                    <a th:href="@{/event/detail/{id}(id=${event.id})}">Details</a>
-                  | <a th:href="@{/event/edit/{id}(id=${event.id})}">Edit</a>
-                    | <a th:href="@{/event/delete/{id}(id=${event.id})}">Delete</a>
-
-                    |   </span>
-                    <a th:if="${event.endDate.isAfter(dateNow) or event.endDate.isEqual(dateNow)}" th:href="@{/event/reserve/{id}(id=${event.id})}">Reserve</a>
+                        <a th:href="@{/event/detail/{id}(id=${event.id})}">Detail</a> |
+                        <a th:href="@{/event/edit/{id}(id=${event.id})}">Edit</a> |
+                        <a th:href="@{/event/delete/{id}(id=${event.id})}">Delete</a>
+                    </span>&nbsp;
+                    <a th:if="${event.endDate.isAfter(dateNow) or event.endDate.isEqual(dateNow)}" th:href="@{/event/reserve/{id}(id=${event.id})}" class="btn btn-success">Reserve</a>
                     <span th:if="${event.endDate.isBefore(dateNow)}">Past Event</span>
                 </td>
 

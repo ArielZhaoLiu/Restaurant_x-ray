@@ -11,7 +11,11 @@
 <div class="container">
   <main role="main" class="pb-3">
     <h1>MENU</h1>
-    <a th:if="${session.loggedIn}" th:href="@{/menu/create}">Add Menu</a>
+    <a th:if="${session.loggedIn}"  th:href="@{/menu/create}" class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">Add Menu
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z"/>
+      </svg>
+    </a>
     <table class="table" th:unless="${menus ==null}">
       <thead>
       <tr>
@@ -20,7 +24,7 @@
         <th>Manage</th>
       </tr>
       </thead>
-      <tbody>
+      <tbody class="table-group-divider">
       <tr th:each="menu :${menus}">
         <td><span th:text="${menu.name}"></span></td>
         <td><span th:text="${menu.description}"></span></td>

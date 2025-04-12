@@ -1,10 +1,7 @@
 package nbcc.restaurant.controllers;
 
 import jakarta.validation.Valid;
-import nbcc.restaurant.entities.Event;
-import nbcc.restaurant.entities.Menu;
-import nbcc.restaurant.entities.Layout;
-import nbcc.restaurant.entities.Seating;
+import nbcc.restaurant.entities.*;
 import nbcc.restaurant.repositories.*;
 import nbcc.restaurant.services.MenuService;
 import org.springframework.stereotype.Controller;
@@ -13,6 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -23,13 +21,15 @@ public class EventController {
     private final MenuService menuService;
     private final LayoutRepository layoutRepo;
     private final ReservationRequestRepository requestRepo;
+    private final ReservationRequestRepository reservationRequestRepository;
 
-    public EventController(EventRepository eventRepo, SeatingRepository seatingRepository, MenuService menuService, LayoutRepository layoutRepo, ReservationRequestRepository requestRepo) {
+    public EventController(EventRepository eventRepo, SeatingRepository seatingRepository, MenuService menuService, LayoutRepository layoutRepo, ReservationRequestRepository requestRepo, ReservationRequestRepository reservationRequestRepository) {
         this.eventRepo = eventRepo;
         this.seatingRepo = seatingRepository;
         this.menuService = menuService;
         this.layoutRepo = layoutRepo;
         this.requestRepo = requestRepo;
+        this.reservationRequestRepository = reservationRequestRepository;
     }
 
     @ModelAttribute("menus")
@@ -247,6 +247,20 @@ public class EventController {
         model.addAttribute("startDate", startDate);
         model.addAttribute("endDate", endDate);
         return "/events/index";
+    }
+
+    @GetMapping("/event/{id}/reservations")
+    public String getAllApproved(@PathVariable long id, ReservationStatus status, Model model) {
+
+        var eventDb = eventRepo.findById(id).get();
+
+        List<Seating> seatings = seatingRepo.findByEventId(id);
+        List<ReservationRequest> approvedReservations = requestRepo.findApprovedReservationsBySeating(seatings, ReservationStatus.APPROVED);
+
+        model.addAttribute("event", eventDb);
+        model.addAttribute("approvedReservations", approvedReservations);
+
+        return "/events/reservations";
     }
 }
 

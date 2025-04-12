@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <title>ApprovedReservations</title>
+  <link th:href="@{/css/bootstrap.css}" rel="stylesheet"/>
+</head>
+<body>
+<header>
+  <div th:insert="~{nav :: navbar}"></div>
+</header>
+<div class="container">
+  <main role="main" class="pb-3">
+    <h4>Approved Reservations under this Event: </h4>
+    <table class="table" th:unless="${approvedReservations == null}">
+      <thead>
+      <tr>
+        <th>Name of Reservation</th>
+        <th>Group Size</th>
+        <th>Seating Start Date & Time</th>
+        <th>Seating Duration(m)</th>
+        <th>Price</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="reservation : ${approvedReservations}">
+        <td><span th:text="*{reservation.firstName}"></span> <span th:text="*{reservation.lastName}"></span></td>
+        <td><span th:text="*{reservation.groupSize}"></span></td>
+        <td><span th:text="*{reservation.seating.seatingDateTime}"></span></td>
+        <td><span th:text="*{reservation.seating.seatingDuration}"></span></td>
+        <td><span th:text="*{reservation.seating.getEvent().price}"></span></td>
+        <td>
+          <a th:href="@{/reservation/{id}(id=${reservation.id})}">Details</a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </main>
+</div>
+</body>
+</html>

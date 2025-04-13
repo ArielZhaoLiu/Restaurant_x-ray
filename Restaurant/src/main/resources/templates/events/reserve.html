@@ -7,74 +7,97 @@
 <body>
 <header><div th:insert="~{nav :: navbar}"></div></header>
 <div class="container">
-  <main role="main" class="pb-3"><h1>Reserve</h1>
-    <div><h4>Event</h4>
-      <hr/>
-      <dl class="row" th:object="${event}">
-        <dt class="col-sm-3"> Name</dt>
-        <dd class="col-sm-9"><span th:text="*{name}"></span></dd>
-        <dt class="col-sm-3"> Description</dt>
-        <dd class="col-sm-9"><span  th:text="*{description}"></span></dd>
-        <dt class="col-sm-3"> Layout</dt>
-        <dd class="col-sm-9"><span  th:text="*{layout.name}"></span></dd>
-        <dt class="col-sm-3"> Number of Tables</dt>
-        <dd class="col-sm-9"><span  th:text="*{layout.diningTables.size()}"></span></dd>
-        <dt class="col-sm-3"> Price</dt>
-        <dd class="col-sm-9"><span  th:text="*{price}"></span></dd>
-        <dt class="col-sm-3"> Start Date</dt>
-        <dd class="col-sm-9"><span  th:text="*{startDate}"></span></dd>
-        <dt class="col-sm-3"> End Date</dt>
-        <dd class="col-sm-9"><span  th:text="*{endDate}"></span></dd>
-        <dt class="col-sm-3"> Creation Date</dt>
-        <dd class="col-sm-9"><span  th:text="*{createdDate}"></span></dd>
-        <dt class="col-sm-3"> Last Updated</dt>
-        <dd class="col-sm-9"><span  th:text="*{updatedAt}"></span></dd>
-        <dt class="col-sm-3"> Menu</dt>
-        <dd class="col-sm-9"><a th:href="@{/menu/{id}(id=*{menu.id})}"><span  th:text="*{menu.name}"></span></a></dd>
-      </dl>
-      <h4>Seating</h4>
-      <hr/>
+  <main role="main" class="pb-3">
+    <h1>Reserve</h1>
+    <div class="row">
 
-      <table class="table" th:unless="${event.getSeatings() ==null}">
-        <thead>
-        <tr>
-          <th th:if="${event.startDate != event.endDate}">Start Date and Time</th>
-          <th th:if="${event.startDate == event.endDate}">Start Time</th>
-          <th th:if="${event.startDate != event.endDate}">End Date and Time</th>
-          <th th:if="${event.startDate == event.endDate}">End Time</th>
-          <th>Duration in Minutes</th>
-          <th>Manage</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="seating : ${event.seatings}">
-          <td>
-                  <span th:if="${event.startDate == event.endDate}">
-                    <span th:text="${#temporals.format(seating.seatingDateTime, 'HH:mm')}"></span>
-                  </span>
-            <span th:if="${event.startDate != event.endDate}">
-                    <span th:text="${#temporals.format(seating.seatingDateTime, 'yyyy-MM-dd HH:mm')}"></span>
-                  </span>
-          </td>
-          <td>
-                  <span th:if="${event.startDate == event.endDate}">
-                    <span th:text="${#temporals.format(seating.seatingDateTime.plusMinutes(seating.seatingDuration), 'HH:mm')}"></span>
-                  </span>
-            <span th:if="${event.startDate != event.endDate}">
-                    <span th:text="${#temporals.format(seating.seatingDateTime.plusMinutes(seating.seatingDuration), 'yyyy-MM-dd HH:mm')}"></span>
-                  </span>
-          </td>
-          <td><span th:text="${seating.seatingDuration}"></span></td>
-          <td> <span th:if="${session.loggedIn}"><a th:href="@{/seating/edit/{id}(id=${seating.id})}">Edit</a>
-                    | <a th:href="@{/seating/delete/{id}(id=${seating.id})}">Delete</a>
-                    | </span><a th:href="@{/seating/reserve/{id}(id=${seating.id})}">Reserve</a>
-          </td>
-        </tr>
-        </tbody>
-      </table>
-      <div><a th:href="@{/events}">Go Back</a> <span th:if="${session.loggedIn}">|| <a th:href="@{/seating/create/{id}(id=${event.id})}">Add Seating</a></span></div>
+      <!-- Left: Event -->
+      <div class="col-md-6">
+        <h4>Event</h4>
+        <hr/>
+        <dl class="row" th:object="${event}">
+          <dt class="col-sm-4">Name</dt>
+          <dd class="col-sm-8"><span th:text="*{name}"></span></dd>
+          <dt class="col-sm-4">Description</dt>
+          <dd class="col-sm-8"><span th:text="*{description}"></span></dd>
+          <dt class="col-sm-4">Layout</dt>
+          <dd class="col-sm-8"><span th:text="*{layout.name}"></span></dd>
+          <dt class="col-sm-4"># of Tables</dt>
+          <dd class="col-sm-8"><span th:text="*{layout.diningTables.size()}"></span></dd>
+          <dt class="col-sm-4">Price</dt>
+          <dd class="col-sm-8"><span th:text="*{price}"></span></dd>
+          <dt class="col-sm-4">Start Date</dt>
+          <dd class="col-sm-8"><span th:text="*{startDate}"></span></dd>
+          <dt class="col-sm-4">End Date</dt>
+          <dd class="col-sm-8"><span th:text="*{endDate}"></span></dd>
+          <dt class="col-sm-4">Created</dt>
+          <dd class="col-sm-8"><span th:text="*{createdDate}"></span></dd>
+          <dt class="col-sm-4">Last Updated</dt>
+          <dd class="col-sm-8"><span th:text="*{updatedAt}"></span></dd>
+          <dt class="col-sm-4">Menu</dt>
+          <dd class="col-sm-8">
+            <a th:href="@{/menu/{id}(id=*{menu.id})}">
+              <span th:text="*{menu.name}"></span>
+            </a>
+          </dd>
+        </dl>
+      </div>
+
+      <!-- Right：Seating -->
+      <div class="col-md-6">
+        <h4>Seating</h4>
+        <hr/>
+        <table class="table" th:unless="${event.getSeatings() == null}">
+          <thead>
+          <tr>
+            <th th:if="${event.startDate != event.endDate}">Start DateTime</th>
+            <th th:if="${event.startDate == event.endDate}">Start Time</th>
+            <th th:if="${event.startDate != event.endDate}">End DateTime</th>
+            <th th:if="${event.startDate == event.endDate}">End Time</th>
+            <th>Duration</th>
+            <th>Manage</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="seating : ${event.seatings}">
+            <td>
+              <span th:if="${event.startDate == event.endDate}">
+                <span th:text="${#temporals.format(seating.seatingDateTime, 'HH:mm')}"></span>
+              </span>
+              <span th:if="${event.startDate != event.endDate}">
+                <span th:text="${#temporals.format(seating.seatingDateTime, 'yyyy-MM-dd HH:mm')}"></span>
+              </span>
+            </td>
+            <td>
+              <span th:if="${event.startDate == event.endDate}">
+                <span th:text="${#temporals.format(seating.seatingDateTime.plusMinutes(seating.seatingDuration), 'HH:mm')}"></span>
+              </span>
+              <span th:if="${event.startDate != event.endDate}">
+                <span th:text="${#temporals.format(seating.seatingDateTime.plusMinutes(seating.seatingDuration), 'yyyy-MM-dd HH:mm')}"></span>
+              </span>
+            </td>
+            <td><span th:text="${seating.seatingDuration}"></span></td>
+            <td>
+              <span th:if="${session.loggedIn}">
+                <a th:href="@{/seating/edit/{id}(id=${seating.id})}">Edit</a> |
+                <a th:href="@{/seating/delete/{id}(id=${seating.id})}">Delete</a> |
+              </span>
+              <a th:href="@{/seating/reserve/{id}(id=${seating.id})}">Reserve</a>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- links -->
+      <div>
+        <a th:href="@{/events}">Go Back</a>
+        <span th:if="${session.loggedIn}">
+          | <a th:href="@{/seating/create/{id}(id=${event.id})}">Add Seating</a>
+          </span>
+      </div>
     </div>
   </main>
+
 </div>
 </body>
 </html>

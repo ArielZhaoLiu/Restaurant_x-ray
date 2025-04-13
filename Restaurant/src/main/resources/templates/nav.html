@@ -10,7 +10,7 @@
 <header th:fragment="navbar" class="p-3 text-bg-dark" style="margin-bottom: 40px;">
     <div class="container">
         <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-            <a class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none" th:href="@{/}">MyRestaurant</a>
+            <a class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none" th:href="@{/}">X-Ray Restaurant</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
                     aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -18,10 +18,11 @@
 
             <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
                 <li>
-                    <a class="nav-link px-2 text-secondary" th:href="@{/events}">Events</a>
+                    <a class="nav-link px-2 text-secondary" th:href="@{/events}"
+                    >Events</a>
                 </li>
                 <li th:if="${session.loggedIn}">
-                    <a class="nav-link px-2 text-white" th:href="@{/layouts}">Layout</a>
+                    <a class="nav-link px-2 text-white link-opacity-50-hover" th:href="@{/layouts}">Layout</a>
                 </li>
                 <li th:if="${session.loggedIn}">
                     <a class="nav-link px-2 text-white" th:href="@{/menu}">Menus</a>

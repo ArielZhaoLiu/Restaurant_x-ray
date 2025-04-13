@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
-  <title>Layouts</title>
+  <title>Reservations</title>
   <link th:href="@{/css/bootstrap.css}" rel="stylesheet"/>
 </head>
 <body>
@@ -10,7 +10,8 @@
 </header>
 <div class="container">
   <main role="main" class="pb-3">
-    <form method="get" th:action="@{/reservations}">
+    <h2>RESERVATIONS</h2><br>
+    <form method="get" th:action="@{/reservations}" style="margin-bottom: 30px">
         <label class="control-label">
           <select class="form-control" name="eventId">
             <option value="">All Events</option>
@@ -30,38 +31,41 @@
                     th:selected="${selectedStatus == statu}">
           </select>
         </label>
-        <button type="submit"  class="btn btn-primary">Filter</button>
+        <button type="submit"  class="btn btn-outline-info">Filter</button>
     </form>
 
     <table class="table" th:unless="${reservations == null}">
       <thead>
       <tr>
-        <th>Event Name</th>
-        <th>Seating Start Date & Time</th>
-        <th>Seating Duration(m)</th>
-        <th>Name of Reservation</th>
-        <th>Group Size</th>
-        <th>Price</th>
-        <th>Status</th>
+        <th>RESERVED BY</th>
+        <th>GROUP</th>
+        <th>EVENT</th>
+        <th>START TIME <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar3-week" viewBox="0 0 16 16">
+          <path d="M14 0H2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2M1 3.857C1 3.384 1.448 3 2 3h12c.552 0 1 .384 1 .857v10.286c0 .473-.448.857-1 .857H2c-.552 0-1-.384-1-.857z"/>
+          <path d="M12 7a1 1 0 1 0 0-2 1 1 0 0 0 0 2m-5 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2m2-3a1 1 0 1 0 0-2 1 1 0 0 0 0 2m-5 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/>
+        </svg></th>
+        <th>DURATION(min)</th>
+        <th>PRICE($)</th>
+        <th>STATUS</th>
         <th></th>
       </tr>
       </thead>
       <tbody class="table-group-divider">
       <tr th:each="reservation : ${reservations}">
+        <td><span th:text="*{reservation.firstName}"></span> <span th:text="*{reservation.lastName}"></span></td>
+        <td><span th:text="*{reservation.groupSize}"></span></td>
         <td><span th:text="*{reservation.seating.getEvent().name}"></span></td>
         <td><span th:text="*{reservation.seating.seatingDateTime}"></span></td>
         <td><span th:text="*{reservation.seating.seatingDuration}"></span></td>
-        <td><span th:text="*{reservation.firstName}"></span> <span th:text="*{reservation.lastName}"></span></td>
-        <td><span th:text="*{reservation.groupSize}"></span></td>
         <td><span th:text="*{reservation.seating.getEvent().price}"></span></td>
         <td>
           <span th:if="*{reservation.status !=null && reservation.status.name() == 'APPROVED'}" th:text="*{reservation.status}" class="badge rounded-pill text-bg-success"></span>
-          <span th:if="*{reservation.status !=null && reservation.status.name() == 'DENIED'}" th:text="*{reservation.status}" class="badge rounded-pill text-bg-secondary"></span>
+          <span th:if="*{reservation.status !=null && reservation.status.name() == 'DENIED'}" th:text="*{reservation.status}" class="badge rounded-pill text-bg-danger"></span>
           <span th:if="*{reservation.status !=null && reservation.status.name() == 'PENDING'}" th:text="*{reservation.status}" class="badge rounded-pill text-bg-warning"></span>
 
         </td>
         <td>
-          <a th:href="@{/reservation/{id}(id=${reservation.id})}">Select</a>
+          <a th:href="@{/reservation/{id}(id=${reservation.id})}" class="btn btn-outline-info">Edit</a>
         </td>
       </tr>
       </tbody>

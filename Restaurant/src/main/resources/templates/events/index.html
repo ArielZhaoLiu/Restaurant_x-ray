@@ -13,17 +13,42 @@
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
                 <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z"/>
             </svg>
-        </a>
+        </a><br><br>
+        <form th:action="@{/event/filter}" method="post">
+            <label class="control-label">Start Date:
+                <input type="date" name="startDate" th:value="${startDate}" class="form-control">
+            </label>
+
+            <label class="control-label">End Date:
+                <input type="date" name="endDate" th:value="${endDate}" class="form-control">
+            </label>
+
+            <input type="submit" value="Filter" class="btn btn-outline-info"/>
+        </form>
 
         <table class="table table-hover" th:unless="${events ==null}">
             <thead>
             <tr>
-                <th>NAME</th>
+                <th>EVENT</th>
 <!--                <th>Description</th>-->
-                <th>START DATE</th>
-                <th>END DATE</th>
-                <th>PRICE</th>
+                <th>START&nbsp;
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" class="bi bi-calendar3-week" viewBox="0 0 16 16">
+                        <path d="M14 0H2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2M1 3.857C1 3.384 1.448 3 2 3h12c.552 0 1 .384 1 .857v10.286c0 .473-.448.857-1 .857H2c-.552 0-1-.384-1-.857z"/>
+                        <path d="M12 7a1 1 0 1 0 0-2 1 1 0 0 0 0 2m-5 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2m2-3a1 1 0 1 0 0-2 1 1 0 0 0 0 2m-5 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/>
+                    </svg>
+                </th>
+                <th>END&nbsp;
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" class="bi bi-calendar3-week" viewBox="0 0 16 16">
+                        <path d="M14 0H2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2M1 3.857C1 3.384 1.448 3 2 3h12c.552 0 1 .384 1 .857v10.286c0 .473-.448.857-1 .857H2c-.552 0-1-.384-1-.857z"/>
+                        <path d="M12 7a1 1 0 1 0 0-2 1 1 0 0 0 0 2m-5 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2m2-3a1 1 0 1 0 0-2 1 1 0 0 0 0 2m-5 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/>
+                    </svg>
+                </th>
+                <th>PRICE <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cash-stack" viewBox="0 0 16 16">
+                    <path d="M1 3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1zm7 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4"/>
+                    <path d="M0 5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1zm3 0a2 2 0 0 1-2 2v4a2 2 0 0 1 2 2h10a2 2 0 0 1 2-2V7a2 2 0 0 1-2-2z"/>
+                </svg></th>
                 <th>ACTION</th>
+                <th></th>
             </tr>
             </thead>
             <tbody class="table-group-divider">
@@ -39,18 +64,19 @@
                             <path d="M5 6a1 1 0 1 1-2 0 1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
                         </svg>&nbsp;
                     </span>
-                    <small th:text="${event.description}" class="fw-light text-body-tertiary">
+                    <small th:text="${event.description}" class="fw-normal text-body-tertiary">
                     </small>
                 </td>
 <!--                <td><span th:text="${event.description}"></span></td>-->
                 <td><span th:text="${event.startDate}"></span></td>
                 <td><span th:text="${event.endDate}"></span></td>
-                <td><span th:text="${event.price}"></span></td>
+                <td>$<span th:text="${event.price}"></span></td>
                 <td>
                     <a th:if="${event.endDate.isAfter(dateNow) or event.endDate.isEqual(dateNow)}" th:href="@{/event/reserve/{id}(id=${event.id})}" class="btn btn-success">Reserve</a>
                     <span th:if="${event.endDate.isBefore(dateNow)}">Past Event</span>
+                </td>
+                <td>
                     <span th:if="${session.loggedIn}">
-                        &nbsp;
                         <a th:href="@{/event/edit/{id}(id=${event.id})}" class="link-warning">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
                               <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
@@ -68,19 +94,6 @@
             </tr>
             </tbody>
         </table>
-
-        <form th:action="@{/event/filter}" method="post">
-            <label class="control-label">Start Date:
-                <input type="date" name="startDate" th:value="${startDate}" class="form-control">
-            </label>
-
-            <label class="control-label">End Date:
-                <input type="date" name="endDate" th:value="${endDate}" class="form-control">
-            </label>
-
-            <input type="submit" value="Filter" class="btn btn-primary"/>
-        </form>
-
     </main>
 </div>
 </body>

@@ -11,34 +11,58 @@
 <div class="container">
   <main role="main" class="pb-3">
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-md-5">
         <h1>Reservation Details</h1>
       </div>
-      <div class="col-md-6">
+      <div class="col-md-7 g-2">
         <form method="post" th:action="@{/reservation/{id}/edit(id=${reservation.id})}" th:object="${reservation}">
-          <label class="control-label"> Set Status:
-            <select class="form-control" th:field="*{status}" th:disabled="${reservation.status != null and reservation.status.name() == 'APPROVED'}">
-              <option th:each="statu : ${status}"
-                      th:value="${statu}"
-                      th:text="${statu}">
-            </select>
-          </label>
-          <label class="control-label"> Assign a Dinning Table if approved:
-            <select class="form-control" th:field="*{assignedTable}" th:disabled="${reservation.status != null and reservation.status.name() == 'APPROVED'}">
-              <option value="">-- Please Select a Table (Number of seats)--</option>
-              <option th:each="table : ${tables}"
-                      th:value="${table.id}"
-                      th:text="${table.numberOfSeats}">
-            </select>
-            <span class="alert alert-warning" th:errors="*{assignedTable}"></span>
-          </label>
-          <button type="submit"  class="btn btn-primary"  th:disabled="${reservation.status != null and reservation.status.name() == 'APPROVED'}">Save</button>
+          <div class="row">
+            <div class="col-md-3">
+              <div class="form-floating">
+                <select class="form-select" th:field="*{status}" th:disabled="${reservation.status != null and reservation.status.name() == 'APPROVED'}" id="floatingSelectGrid">
+                  <option th:each="statu : ${status}"
+                          th:value="${statu}"
+                          th:text="${statu}">
+                </select>
+                <label for="floatingSelectGrid">Status: </label>
+              </div>
+            </div>
+
+            <div class="col-md-7">
+              <div class="form-floating">
+                <select class="form-select" th:field="*{assignedTable}" th:disabled="${reservation.status != null and reservation.status.name() == 'APPROVED'}" id="floatingSelectTable">
+                  <option value="">-- Please Select a Table --</option>
+                  <option th:each="table : ${tables}"
+                          th:value="${table.id}"
+                          th:text="${table.numberOfSeats}">
+                </select>
+                <label class="control-label" for="floatingSelectTable"> Assign a Table if Approve (Number of seats):</label>
+                <span class="alert alert-warning" th:errors="*{assignedTable}"></span>
+              </div>
+            </div>
+
+            <div class="col-md-2">
+              <button type="submit"  class="btn btn-info btn-lg" th:disabled="${reservation.status != null and reservation.status.name() == 'APPROVED'}">SET</button>
+            </div>
+            </div>
         </form>
       </div>
     </div>
-
-    <div><h4>Event</h4>
+    <hr/>
+    <div>
+      <dl class="row" th:object="${reservation}">
+        <dt class="col-sm-2">First Name: </dt>
+        <dd class="col-sm-10"><span th:text="*{firstName}"></span></dd>
+        <dt class="col-sm-2">Last Name: </dt>
+        <dd class="col-sm-10"><span th:text="*{lastName}"></span></dd>
+        <dt class="col-sm-2">Email Address: </dt>
+        <dd class="col-sm-10"><span th:text="*{email}"></span></dd>
+        <dt class="col-sm-2">Group Size: </dt>
+        <dd class="col-sm-10"><span th:text="*{groupSize}"></span></dd>
+      </dl>
+      <h4>Event</h4>
       <hr/>
+
       <dl class="row" th:object="${event}">
         <dt class="col-sm-2"> Name</dt>
         <dd class="col-sm-10"><span th:text="*{name}"></span></dd>
@@ -65,21 +89,9 @@
         <dt class="col-sm-2">Duration in Minutes</dt>
         <dd class="col-sm-10"><span th:text="*{seatingDuration}"></span></dd>
       </dl>
-      <hr/>
 
-      <dl class="row" th:object="${reservation}">
-        <dt class="col-sm-2">First Name: </dt>
-        <dd class="col-sm-10"><span th:text="*{firstName}"></span></dd>
-        <dt class="col-sm-2">Last Name: </dt>
-        <dd class="col-sm-10"><span th:text="*{lastName}"></span></dd>
-        <dt class="col-sm-2">Email Address: </dt>
-        <dd class="col-sm-10"><span th:text="*{email}"></span></dd>
-        <dt class="col-sm-2">Group Size: </dt>
-        <dd class="col-sm-10"><span th:text="*{groupSize}"></span></dd>
-      </dl>
     </div>
-
-    <div><a th:href="@{/reservations}">Go Back</a></div>
+    <div><a th:href="@{/reservations}">< Go Back</a></div>
   </main>
 </div>
 </body>

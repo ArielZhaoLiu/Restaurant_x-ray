@@ -1,10 +1,7 @@
 package nbcc.restaurant.controllers;
 
 import jakarta.validation.Valid;
-import nbcc.restaurant.entities.Event;
-import nbcc.restaurant.entities.Menu;
-import nbcc.restaurant.entities.Layout;
-import nbcc.restaurant.entities.Seating;
+import nbcc.restaurant.entities.*;
 import nbcc.restaurant.repositories.*;
 import nbcc.restaurant.services.MenuService;
 import org.springframework.stereotype.Controller;
@@ -247,6 +244,15 @@ public class EventController {
         model.addAttribute("startDate", startDate);
         model.addAttribute("endDate", endDate);
         return "/events/index";
+    }
+
+    @GetMapping("/event/{id}/reservations")
+    public String getAllApproved(@PathVariable long id, ReservationStatus status, Model model) {
+        var eventDb = eventRepo.findById(id).get();
+        List<Seating> seatings = seatingRepo.findByEventId(id);
+        List<ReservationRequest> approvedReservations = requestRepo.findApprovedReservationsBySeating(seatings, ReservationStatus.APPROVED);
+        model.addAttribute("event", eventDb);    model.addAttribute("approvedReservations", approvedReservations);
+        return "/events/reservations";
     }
 }
 

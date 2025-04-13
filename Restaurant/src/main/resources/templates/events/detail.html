@@ -8,8 +8,11 @@
 <header><div th:insert="~{nav :: navbar}"></div></header>
 <div class="container">
   <main role="main" class="pb-3"><h1>Details</h1>
-    <div><h4>Event</h4>
-      <hr/>
+      <div class="row">
+        <div class="col-md-3"><h4>Event</h4></div>
+        <div class="col-md-9">
+          <a th:href="@{/event/{id}/reservations(id=${event.id})}">View Approved Reservations</a>
+        </div></div><hr/>
       <dl class="row" th:object="${event}">
         <dt class="col-sm-3"> Name</dt>
         <dd class="col-sm-9"><span th:text="*{name}"></span></dd>

@@ -18,7 +18,7 @@ public interface ReservationRequestRepository extends JpaRepository<ReservationR
     List<ReservationRequest> findAllByOrderBySeating_SeatingDateTimeAsc();
     ReservationRequest findByAssignedTable(DiningTable table);
     List<ReservationRequest> findBySeating_Event_Id(Long eventId);
-    ReservationRequest findBySeatingId(long seatingId);
+    List<ReservationRequest> findBySeatingId(long seatingId);
     @Query("SELECT r FROM ReservationRequest r WHERE r.seating IN :seatings AND r.status = :status ")
     List<ReservationRequest> findApprovedReservationsBySeating(@Param("seatings") List<Seating> seatings, @Param("status") ReservationStatus status);
 }

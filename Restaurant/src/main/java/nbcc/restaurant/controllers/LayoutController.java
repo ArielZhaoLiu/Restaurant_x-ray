@@ -122,13 +122,15 @@ public class LayoutController {
 
 
     @PostMapping("/diningTable/delete/{id}")
-    public String tableDelete(@PathVariable long id) {
+    public String tableDelete(@PathVariable long id, Model model) {
 
         var table = diningTableRepo.findById(id).orElse(null);
 
         // if table is already associated with a reservationRequest
         var reservation = reservationRequestRepo.findByAssignedTable(table);
+        model.addAttribute("reservation", reservation);
         if (reservation != null) {
+
             table.setArchived(true);
             diningTableRepo.save(table);
 

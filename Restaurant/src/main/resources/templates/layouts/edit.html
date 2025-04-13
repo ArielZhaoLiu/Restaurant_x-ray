@@ -47,9 +47,13 @@
                     <tr th:unless="${table.isArchived()}" th:each="table : ${diningTables}">
                         <td><span th:text="${table.numberOfSeats}"></span></td>
                         <td>
-                            <form th:action="@{/diningTable/delete/{id}(id=${table.id})}" method="post">
+                            <form th:if="${#lists.isEmpty(table.reservationRequests)}" th:action="@{/diningTable/delete/{id}(id=${table.id})}" method="post">
                                 <input type="hidden" name="layoutId" th:field="${layout.id}"/>
                                 <button type="submit" class="btn btn-danger">Remove</button>
+                            </form>
+                            <form  th:unless="${#lists.isEmpty(table.reservationRequests)}" th:action="@{/diningTable/delete/{id}(id=${table.id})}" method="post">
+                                <input type="hidden" name="layoutId" th:field="${layout.id}"/>
+                                <button type="submit" class="btn btn-warning">Archive</button>
                             </form>
                         </td>
                     </tr>

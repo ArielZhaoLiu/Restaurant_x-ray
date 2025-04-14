@@ -91,7 +91,7 @@ public class SeatingController {
             model.addAttribute("seating", seating);
             }
 
-            if (request == null)
+            if (request.isEmpty())
                 empty = true;
             else
                 empty = false;

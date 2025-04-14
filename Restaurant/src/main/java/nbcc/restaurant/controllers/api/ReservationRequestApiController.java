@@ -42,7 +42,7 @@ public class ReservationRequestApiController {
             if(seating.isPresent()){
                 if(seating.get().getEvent().getId() == event.get().getId()){
                     var reservationRequest = requestRepo.findBySeatingId(seating.get().getId());
-                    if(reservationRequest !=null){
+                    if(!reservationRequest.isEmpty()){
                         return new ResponseEntity<>("There is existing request", HttpStatus.BAD_REQUEST);
                     }
                     if(event.get().getEndDate().isAfter(LocalDate.now())){

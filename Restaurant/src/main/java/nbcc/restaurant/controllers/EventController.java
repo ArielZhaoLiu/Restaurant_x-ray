@@ -134,7 +134,7 @@ public class EventController {
         if(entity.isPresent()){
             for(Seating seating: seatings){
                 var request = requestRepo.findBySeatingId(seating.getId());
-                if(request == null) {
+                if(request.isEmpty()) {
                     empty = true;
                 }
                 else {
